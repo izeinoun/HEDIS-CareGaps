@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}Review {{ measure_id }} · {{ case.member.name or case.member.id }}{% endblock %}
+{% block body %}
+<div class="crumbs">
+  <a href="{{ url_for('index') }}">Patients</a> /
+  <a href="{{ url_for('case_view', case_id=case.id) }}">{{ case.member.name or case.member.id }}</a> /
+  {{ measure_id }}
+</div>
+
+<div class="page-head compact-head">
+  <div>
+    <h1>{{ findings.measure_id }} — {{ findings.measure_name }}</h1>
+    <p class="muted small">
+      MY {{ findings.measurement_year }} · workflow {{ findings.workflow }} · Pass-1 {{ findings.provider }}
+      {% if findings.rules_version %}· rules {{ findings.rules_version.measurement_year }}/schema {{ findings.rules_version.schema_version }}{% endif %}
+    </p>
+  </div>
+  <div class="head-actions">
+    <a class="btn" href="{{ url_for('case_source', case_id=case.id) }}" target="_blank">View original ↗</a>
+    <a class="btn" href="{{ url_for('case_audit', case_id=case.id) }}">Audit trail ↗</a>
+    {% if not blind %}<a class="btn role-qa" href="{{ url_for('review', case_id=case.id, measure_id=measure_id) }}?pass=second">Blind 2nd read →</a>{% endif %}
+  </div>
+</div>
+
+{% if blind %}
+<div class="notice warn blind-banner">
+  🕶 <b>Blind second read</b> — you are reviewing independently for inter-rater reliability.
+  The first reviewer's decisions and sign-off are hidden. Switch the acting user (top right) to yourself first.
+</div>
+{% endif %}
+{% if findings.source_document and findings.source_document.document_id %}
+<p class="muted xsmall doc-line">Source of record: <code>{{ findings.source_document.document_id }}</code>
+  · {{ findings.source_document.filename }} · original unaltered, read-only</p>
+{% endif %}
+
+{% if findings.escalations %}
+<div class="notice warn">⚑ <b>Escalated for review</b> — “{{ findings.escalations[-1].reason }}”
+  <span class="muted small">by {{ findings.escalations[-1].by.name }} ({{ findings.escalations[-1].by.role }})
+  · {{ findings.escalations[-1].at[:16].replace('T',' ') }}{% if findings.escalations|length > 1 %} · +{{ findings.escalations|length - 1 }} more{% endif %}</span></div>
+{% endif %}
+
+<section id="signoff-panel"></section>
+
+{% if findings.validation %}
+  {% set v = findings.validation %}
+  <div class="notice {{ 'ok' if v.verdict == 'passed' else 'warn' }}">
+    Submission gate: member match <b>{{ v.member_match }}</b>
+    (name {{ 'found' if v.name_found else 'not found' }}, DOB {{ 'found' if v.dob_found else 'not found' }});
+    measure vocabulary {{ v.measure_alignment }}.
+    {% if v.warnings %}Warnings: {{ v.warnings | join('; ') }}.{% endif %}
+  </div>
+{% endif %}
+
+{% if findings.summary and findings.summary.out_of_window_required %}
+  <div class="notice warn">⏱ Timing check: {{ findings.summary.out_of_window_required }} required element(s) are
+    documented but dated <b>outside the measurement window</b>. The value is present but may not count —
+    confirm the date before accepting the result. (Sign-off is gated until these are decided.)</div>
+{% endif %}
+
+{% if findings.gap_outcome %}
+  <div class="outcome outcome-{{ findings.gap_outcome.status }} big">
+    Proposed gap outcome: <b>{{ findings.gap_outcome.status.replace('_',' ') }}</b>
+    — {{ findings.gap_outcome.rationale }}
+    <span class="muted small">This is a proposal for you to confirm, not a determination.</span>
+  </div>
+{% endif %}
+
+{% if findings.substantiation %}
+  {% set s = findings.substantiation %}
+  {% set vlabel = 'Present' if s.valid_data_present is true else ('Not present' if s.valid_data_present is false else 'Indeterminate') %}
+  {% set vcls = 'ok' if s.valid_data_present is true else ('warn' if s.valid_data_present is false else 'muted') %}
+  <div class="notice {{ vcls }} substantiation">
+    <b>Substantiating data:</b> {{ vlabel }}
+    {% if s.missing_elements %}<span class="muted small">· missing: {{ s.missing_elements|join(', ') }}</span>{% endif %}
+    &nbsp;·&nbsp; <b>Recommended next step:</b> {{ s.next_step.replace('_',' ') }}
+    <span class="muted small">— a proposal you confirm at sign-off; the app does not enter data or contact providers.</span>
+  </div>
+{% endif %}
+
+<div class="split">
+  <!-- Chart panel -->
+  <section class="chart-panel">
+    <div class="panel-head">Medical record<span class="muted small"> · click a finding to jump here</span></div>
+    <pre id="chart" class="chart"></pre>
+  </section>
+
+  <!-- Findings panel -->
+  <section class="findings-panel">
+    <div class="panel-head">
+      Measure data
+      {% if findings.summary %}<span class="muted small">{{ findings.summary.elements_found }}/{{ findings.summary.elements_total }} found ·
+      {{ findings.summary.required_missing }} required missing</span>{% endif %}
+    </div>
+    <div id="elements"></div>
+
+    <div class="panel-head">
+      Candidate exclusions
+      {% if findings.summary %}<span class="muted small">{{ findings.summary.exclusions_proposed }} proposed{% if findings.summary.exclusions_already_applied %},
+      {{ findings.summary.exclusions_already_applied }} already applied{% endif %}</span>{% endif %}
+    </div>
+    <div id="exclusions"></div>
+  </section>
+</div>
+
+<script id="findings-data" type="application/json">{{ findings | tojson }}</script>
+<script id="chart-data" type="application/json">{{ chart_text | tojson }}</script>
+<script>
+  window.DECISION_URL = "{{ url_for('review_decision', case_id=case.id, measure_id=measure_id) }}";
+  window.SIGNOFF_URL = "{{ url_for('review_signoff', case_id=case.id, measure_id=measure_id) }}";
+  window.ESCALATE_URL = "{{ url_for('review_escalate', case_id=case.id, measure_id=measure_id) }}";
+  window.PASS = "{{ review_pass }}";
+</script>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='review.js') }}"></script>
+{% endblock %}

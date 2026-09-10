@@ -1,0 +1,630 @@
+{
+  "workflow": "chase",
+  "mode": "targeted",
+  "measure_id": "CBP",
+  "measure_name": "Controlling High Blood Pressure",
+  "measurement_year": "MY2027",
+  "rules_version": {
+    "measurement_year": "MY2027",
+    "schema_version": "1.1",
+    "extracted_at": "2026-09-08",
+    "document_title": "HEDIS MY2027 Volume 2: Technical Specifications for Health Plans",
+    "document_url": "https://store.ncqa.org/hedis-my2027-volume-2.html"
+  },
+  "provider": "anthropic",
+  "case_context": {
+    "member_id": "M-7002",
+    "member_age": 70,
+    "admin_status": "gap",
+    "admin_exclusions_applied": [],
+    "last_dos": null,
+    "chased": true
+  },
+  "validation": null,
+  "elements": [
+    {
+      "element_key": "bp_date",
+      "element_label": "BP reading date",
+      "element_type": "date",
+      "required": true,
+      "unit": null,
+      "options": null,
+      "timing": "Most recent reading in the measurement year",
+      "compliance_hint": "Use the most recent reading on or before Dec 31",
+      "evidence_role": null,
+      "ai_value": "06/22/2027",
+      "ai_confidence": 0.95,
+      "evidence_text": "Date of service: 06/22/2027 Provider: H. Park, DO",
+      "evidence_anchored": true,
+      "status": "proposed",
+      "in_window": true,
+      "compliance": {
+        "checkable": false,
+        "meets": null,
+        "hint": "Use the most recent reading on or before Dec 31",
+        "basis": null
+      },
+      "needs_review": false,
+      "document_id": "doc_7b1956597c3f",
+      "page_number": 1,
+      "char_start": 115,
+      "char_end": 151
+    },
+    {
+      "element_key": "systolic",
+      "element_label": "Systolic",
+      "element_type": "numeric",
+      "required": true,
+      "unit": "mmHg",
+      "options": null,
+      "timing": "Most recent reading in the measurement year",
+      "compliance_hint": "Meets threshold when < 140",
+      "evidence_role": null,
+      "ai_value": "138",
+      "ai_confidence": 0.98,
+      "evidence_text": "Blood pressure (BP) 138/88 mmHg, seated, outpatient office reading.",
+      "evidence_anchored": true,
+      "status": "proposed",
+      "in_window": true,
+      "compliance": {
+        "checkable": true,
+        "meets": true,
+        "hint": "Meets threshold when < 140",
+        "basis": "138 < 140"
+      },
+      "needs_review": false,
+      "document_id": "doc_7b1956597c3f",
+      "page_number": 1,
+      "char_start": 172,
+      "char_end": 239
+    },
+    {
+      "element_key": "diastolic",
+      "element_label": "Diastolic",
+      "element_type": "numeric",
+      "required": true,
+      "unit": "mmHg",
+      "options": null,
+      "timing": "Most recent reading in the measurement year",
+      "compliance_hint": "Meets threshold when < 90",
+      "evidence_role": null,
+      "ai_value": "88",
+      "ai_confidence": 0.98,
+      "evidence_text": "Blood pressure (BP) 138/88 mmHg, seated, outpatient office reading.",
+      "evidence_anchored": true,
+      "status": "proposed",
+      "in_window": true,
+      "compliance": {
+        "checkable": true,
+        "meets": true,
+        "hint": "Meets threshold when < 90",
+        "basis": "88 < 90"
+      },
+      "needs_review": false,
+      "document_id": "doc_7b1956597c3f",
+      "page_number": 1,
+      "char_start": 172,
+      "char_end": 239
+    },
+    {
+      "element_key": "bp_setting",
+      "element_label": "Setting",
+      "element_type": "text",
+      "required": false,
+      "unit": null,
+      "options": [
+        "Outpatient",
+        "Remote monitoring",
+        "Member-reported device"
+      ],
+      "timing": null,
+      "compliance_hint": "Outpatient, remote monitor, or member-reported device",
+      "evidence_role": null,
+      "ai_value": "Outpatient",
+      "ai_confidence": 0.95,
+      "evidence_text": "Blood pressure (BP) 138/88 mmHg, seated, outpatient office reading.",
+      "evidence_anchored": true,
+      "status": "proposed",
+      "in_window": null,
+      "compliance": {
+        "checkable": false,
+        "meets": null,
+        "hint": "Outpatient, remote monitor, or member-reported device",
+        "basis": null
+      },
+      "needs_review": false,
+      "document_id": "doc_7b1956597c3f",
+      "page_number": 1,
+      "char_start": 172,
+      "char_end": 239
+    },
+    {
+      "element_key": "provider_credential",
+      "element_label": "Performing provider credential",
+      "element_type": "text",
+      "required": false,
+      "unit": null,
+      "options": null,
+      "timing": null,
+      "compliance_hint": "Capture the performing provider's signature/credential where the measure requires it",
+      "evidence_role": "provider_credential",
+      "ai_value": "DO",
+      "ai_confidence": 0.95,
+      "evidence_text": "Essential hypertension. No evidence of ESRD or dialysis. Signed by H. Park, DO.",
+      "evidence_anchored": true,
+      "status": "proposed",
+      "in_window": null,
+      "compliance": {
+        "checkable": false,
+        "meets": null,
+        "hint": "Capture the performing provider's signature/credential where the measure requires it",
+        "basis": null
+      },
+      "needs_review": false,
+      "document_id": "doc_7b1956597c3f",
+      "page_number": 1,
+      "char_start": 252,
+      "char_end": 331
+    }
+  ],
+  "exclusions": [],
+  "gap_outcome": null,
+  "substantiation": {
+    "valid_data_present": true,
+    "substantiating_elements": [
+      "bp_date",
+      "systolic",
+      "diastolic"
+    ],
+    "missing_elements": [],
+    "next_step": "ready_for_manual_entry",
+    "note": "Proposed substantiation and next step for reviewer confirmation; not a compliance determination. QMRM entry (X-5) and provider contact (X-8) are out of scope."
+  },
+  "measure_result": {
+    "proposed_status": "numerator_evidence_found",
+    "proposed_basis": "All required data elements are documented with anchored evidence.",
+    "reviewer_decision": "accepted",
+    "final_status": "gap_closed",
+    "decided_by": "Dana Cole (Reviewer)",
+    "decided_at": "2026-09-10T22:49:28+00:00",
+    "note": null
+  },
+  "audit_log": [
+    {
+      "seq": 1,
+      "ts": "2026-09-10T22:44:13+00:00",
+      "actor": "system",
+      "action": "analysis_run",
+      "target": "CBP",
+      "detail": "targeted analysis, chase workflow"
+    },
+    {
+      "seq": 2,
+      "ts": "2026-09-10T22:44:13+00:00",
+      "actor": "ai",
+      "action": "element_proposed",
+      "target": "bp_date",
+      "detail": "value=06/22/2027 confidence=0.95 anchored=True",
+      "ai_value": "06/22/2027"
+    },
+    {
+      "seq": 3,
+      "ts": "2026-09-10T22:44:13+00:00",
+      "actor": "ai",
+      "action": "element_proposed",
+      "target": "systolic",
+      "detail": "value=138 confidence=0.98 anchored=True",
+      "ai_value": "138"
+    },
+    {
+      "seq": 4,
+      "ts": "2026-09-10T22:44:13+00:00",
+      "actor": "ai",
+      "action": "element_proposed",
+      "target": "diastolic",
+      "detail": "value=88 confidence=0.98 anchored=True",
+      "ai_value": "88"
+    },
+    {
+      "seq": 5,
+      "ts": "2026-09-10T22:44:13+00:00",
+      "actor": "ai",
+      "action": "element_proposed",
+      "target": "bp_setting",
+      "detail": "value=Outpatient confidence=0.95 anchored=True",
+      "ai_value": "Outpatient"
+    },
+    {
+      "seq": 6,
+      "ts": "2026-09-10T22:44:13+00:00",
+      "actor": "ai",
+      "action": "element_proposed",
+      "target": "provider_credential",
+      "detail": "value=DO confidence=0.95 anchored=True",
+      "ai_value": "DO"
+    },
+    {
+      "seq": 7,
+      "ts": "2026-09-10T22:44:13+00:00",
+      "actor": "ai",
+      "action": "measure_result_proposed",
+      "target": "CBP",
+      "detail": "numerator_evidence_found"
+    },
+    {
+      "seq": 8,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "bp_date",
+      "detail": "kept 06/22/2027",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "ai_value": "06/22/2027"
+    },
+    {
+      "seq": 9,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "systolic",
+      "detail": "kept 138",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "ai_value": "138"
+    },
+    {
+      "seq": 10,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "diastolic",
+      "detail": "kept 88",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "ai_value": "88"
+    },
+    {
+      "seq": 11,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "bp_setting",
+      "detail": "kept Outpatient",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "ai_value": "Outpatient"
+    },
+    {
+      "seq": 12,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "provider_credential",
+      "detail": "kept DO",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "ai_value": "DO"
+    },
+    {
+      "seq": 13,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "reviewer",
+      "action": "finding_modified",
+      "target": "diastolic",
+      "detail": "88 -> 90",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "ai_value": "88"
+    },
+    {
+      "seq": 14,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "reviewer",
+      "action": "measure_result_accepted",
+      "target": "CBP",
+      "detail": "final_status=gap_closed",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      }
+    },
+    {
+      "seq": 15,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "bp_date",
+      "detail": "kept 06/22/2027",
+      "by": {
+        "id": "u_overreader",
+        "name": "Sam Ortiz",
+        "role": "Over-reader"
+      },
+      "ai_value": "06/22/2027"
+    },
+    {
+      "seq": 16,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "systolic",
+      "detail": "kept 138",
+      "by": {
+        "id": "u_overreader",
+        "name": "Sam Ortiz",
+        "role": "Over-reader"
+      },
+      "ai_value": "138"
+    },
+    {
+      "seq": 17,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "diastolic",
+      "detail": "kept 88",
+      "by": {
+        "id": "u_overreader",
+        "name": "Sam Ortiz",
+        "role": "Over-reader"
+      },
+      "ai_value": "88"
+    },
+    {
+      "seq": 18,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "bp_setting",
+      "detail": "kept Outpatient",
+      "by": {
+        "id": "u_overreader",
+        "name": "Sam Ortiz",
+        "role": "Over-reader"
+      },
+      "ai_value": "Outpatient"
+    },
+    {
+      "seq": 19,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "provider_credential",
+      "detail": "kept DO",
+      "by": {
+        "id": "u_overreader",
+        "name": "Sam Ortiz",
+        "role": "Over-reader"
+      },
+      "ai_value": "DO"
+    },
+    {
+      "seq": 20,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "reviewer",
+      "action": "measure_result_modified",
+      "target": "CBP",
+      "detail": "final_status=gap_open (2nd read)",
+      "by": {
+        "id": "u_overreader",
+        "name": "Sam Ortiz",
+        "role": "Over-reader"
+      }
+    },
+    {
+      "seq": 21,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "reviewer",
+      "action": "qa_over_read",
+      "target": "CBP",
+      "detail": "QA needs rework",
+      "by": {
+        "id": "u_overreader",
+        "name": "Sam Ortiz",
+        "role": "Over-reader"
+      }
+    },
+    {
+      "seq": 22,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "reviewer",
+      "action": "assigned",
+      "target": "CBP",
+      "detail": "to Sam Ortiz (Over-reader)",
+      "by": {
+        "id": "u_admin",
+        "name": "Morgan Lee",
+        "role": "Administrator"
+      }
+    },
+    {
+      "seq": 23,
+      "ts": "2026-09-10T22:49:28+00:00",
+      "actor": "reviewer",
+      "action": "measure_result_accepted",
+      "target": "CBP",
+      "detail": "final_status=gap_closed",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      }
+    }
+  ],
+  "summary": {
+    "elements_total": 5,
+    "elements_found": 5,
+    "required_missing": 0,
+    "required_missing_keys": [],
+    "exclusions_proposed": 0,
+    "exclusions_already_applied": 0,
+    "mean_confidence": 0.962,
+    "anchored_evidence": 5,
+    "needs_review": 0,
+    "out_of_window_required": 0
+  },
+  "disclaimer": "AI proposals only. Measure compliance, numerator status, and final exclusion application are determined by the reviewer, not by this analysis.",
+  "case_id": "fe0a8f690bed",
+  "analyzed_at": "2026-09-10T22:44:21+00:00",
+  "decisions": {
+    "el:bp_date": {
+      "action": "confirm",
+      "final_value": "06/22/2027",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "at": "2026-09-10T22:44:21+00:00"
+    },
+    "el:systolic": {
+      "action": "confirm",
+      "final_value": "138",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "at": "2026-09-10T22:44:21+00:00"
+    },
+    "el:diastolic": {
+      "action": "modify",
+      "final_value": "90",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "at": "2026-09-10T22:44:21+00:00"
+    },
+    "el:bp_setting": {
+      "action": "confirm",
+      "final_value": "Outpatient",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "at": "2026-09-10T22:44:21+00:00"
+    },
+    "el:provider_credential": {
+      "action": "confirm",
+      "final_value": "DO",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "at": "2026-09-10T22:44:21+00:00"
+    }
+  },
+  "vsd_version": {
+    "measurement_year": "MY2027",
+    "effective": {
+      "start": "2027-01-01",
+      "end": "2027-12-31"
+    },
+    "loaded_at": "2026-09-10"
+  },
+  "document_id": "doc_7b1956597c3f",
+  "source_document": {
+    "document_id": "doc_7b1956597c3f",
+    "filename": "victor_nolan.txt"
+  },
+  "second_read": {
+    "decisions": {
+      "el:bp_date": {
+        "action": "confirm",
+        "final_value": "06/22/2027",
+        "by": {
+          "id": "u_overreader",
+          "name": "Sam Ortiz",
+          "role": "Over-reader"
+        },
+        "at": "2026-09-10T22:44:21+00:00"
+      },
+      "el:systolic": {
+        "action": "confirm",
+        "final_value": "138",
+        "by": {
+          "id": "u_overreader",
+          "name": "Sam Ortiz",
+          "role": "Over-reader"
+        },
+        "at": "2026-09-10T22:44:21+00:00"
+      },
+      "el:diastolic": {
+        "action": "confirm",
+        "final_value": "88",
+        "by": {
+          "id": "u_overreader",
+          "name": "Sam Ortiz",
+          "role": "Over-reader"
+        },
+        "at": "2026-09-10T22:44:21+00:00"
+      },
+      "el:bp_setting": {
+        "action": "confirm",
+        "final_value": "Outpatient",
+        "by": {
+          "id": "u_overreader",
+          "name": "Sam Ortiz",
+          "role": "Over-reader"
+        },
+        "at": "2026-09-10T22:44:21+00:00"
+      },
+      "el:provider_credential": {
+        "action": "confirm",
+        "final_value": "DO",
+        "by": {
+          "id": "u_overreader",
+          "name": "Sam Ortiz",
+          "role": "Over-reader"
+        },
+        "at": "2026-09-10T22:44:21+00:00"
+      }
+    },
+    "measure_result": {
+      "proposed_status": "numerator_evidence_found",
+      "proposed_basis": null,
+      "reviewer_decision": "modified",
+      "final_status": "gap_open",
+      "decided_by": "Sam Ortiz (Over-reader)",
+      "decided_at": "2026-09-10T22:44:21+00:00",
+      "note": "2nd reviewer disagrees on control"
+    }
+  },
+  "qa": {
+    "state": "needs rework",
+    "reviewer": "Sam Ortiz (Over-reader)",
+    "note": null,
+    "at": "2026-09-10T22:44:21+00:00"
+  },
+  "assignment": {
+    "assignee_id": "u_overreader",
+    "assignee_name": "Sam Ortiz",
+    "role": "Over-reader",
+    "assigned_by": "Morgan Lee (Administrator)",
+    "at": "2026-09-10T22:44:21+00:00"
+  }
+}

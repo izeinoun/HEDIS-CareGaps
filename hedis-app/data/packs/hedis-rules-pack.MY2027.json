@@ -1,0 +1,319 @@
+{
+  "schema_version": "1.1",
+  "source": {
+    "document_title": "HEDIS MY2027 Volume 2: Technical Specifications for Health Plans",
+    "measurement_year": "MY2027",
+    "publisher": "NCQA",
+    "document_url": "https://store.ncqa.org/hedis-my2027-volume-2.html",
+    "pages": "sample: CBP, BCS-E",
+    "extracted_at": "2026-09-08",
+    "disclaimer": "Derived from published NCQA HEDIS technical specifications to locate chart evidence. Not a certified compliance engine; all findings are proposals for human review."
+  },
+  "universal_exclusions": [
+    {
+      "key": "hospice",
+      "label": "Hospice care or intervention",
+      "scope": "required",
+      "value_sets": [
+        "Hospice Encounter",
+        "Hospice Intervention"
+      ],
+      "codes": [],
+      "keywords": [
+        "hospice",
+        "hospice care",
+        "hospice intervention"
+      ],
+      "applies_when": null,
+      "note": "Any hospice encounter or hospice intervention retires the member",
+      "timing": "Any time during the measurement year",
+      "source_hint": "both"
+    },
+    {
+      "key": "palliative",
+      "label": "Palliative care",
+      "scope": "required",
+      "value_sets": [
+        "Palliative Care Procedures",
+        "Palliative Care Observations"
+      ],
+      "codes": [],
+      "keywords": [
+        "palliative care",
+        "palliative"
+      ],
+      "applies_when": null,
+      "note": "Palliative care retires the member for the measures that list it \u2014 confirm this measure does",
+      "timing": "Any time during the measurement year",
+      "source_hint": "both"
+    },
+    {
+      "key": "advanced_illness_frailty",
+      "label": "Advanced illness with frailty (age 66+)",
+      "scope": "required",
+      "value_sets": [
+        "Advanced Illness",
+        "Frailty Diagnosis",
+        "Frailty Symptom",
+        "Frailty Device",
+        "Frailty Encounter"
+      ],
+      "codes": [],
+      "keywords": [
+        "advanced illness",
+        "frailty",
+        "frail"
+      ],
+      "applies_when": "Age 66 or older as of the end of the measurement year",
+      "note": "Compound: requires BOTH a frailty indicator AND an advanced-illness indicator (or long-term-institutional status) in the measurement year, for members 66+. A single mention of either alone does not qualify.",
+      "timing": "Indicators during the measurement year; age evaluated as of the anchor date",
+      "compound": true,
+      "source_hint": "both"
+    }
+  ],
+  "measures": [
+    {
+      "measure_id": "CBP",
+      "measure_name": "Controlling High Blood Pressure",
+      "hybrid": true,
+      "source_pages": "example",
+      "eligible_population": {
+        "ages": "18-85",
+        "event_or_diagnosis": "Members with a hypertension diagnosis during the first six months of the measurement year",
+        "continuous_enrollment": "The measurement year",
+        "anchor_date": "December 31 of the measurement year"
+      },
+      "measurement_period": {
+        "window": "The measurement year (Jan 1 - Dec 31)",
+        "lookback": "None"
+      },
+      "numerator": "The most recent blood pressure reading in the measurement year is < 140/90 mmHg.",
+      "data_elements": [
+        {
+          "key": "bp_date",
+          "label": "BP reading date",
+          "type": "date",
+          "required": true,
+          "unit": null,
+          "options": null,
+          "timing": "Most recent reading in the measurement year",
+          "compliance_hint": "Use the most recent reading on or before Dec 31",
+          "keywords": [
+            "blood pressure",
+            "BP",
+            "b/p"
+          ]
+        },
+        {
+          "key": "systolic",
+          "label": "Systolic",
+          "type": "numeric",
+          "required": true,
+          "unit": "mmHg",
+          "options": null,
+          "timing": "Most recent reading in the measurement year",
+          "compliance_hint": "Meets threshold when < 140",
+          "keywords": [
+            "systolic",
+            "blood pressure",
+            "BP"
+          ]
+        },
+        {
+          "key": "diastolic",
+          "label": "Diastolic",
+          "type": "numeric",
+          "required": true,
+          "unit": "mmHg",
+          "options": null,
+          "timing": "Most recent reading in the measurement year",
+          "compliance_hint": "Meets threshold when < 90",
+          "keywords": [
+            "diastolic",
+            "blood pressure",
+            "BP"
+          ]
+        },
+        {
+          "key": "bp_setting",
+          "label": "Setting",
+          "type": "text",
+          "required": false,
+          "unit": null,
+          "options": [
+            "Outpatient",
+            "Remote monitoring",
+            "Member-reported device"
+          ],
+          "timing": null,
+          "compliance_hint": "Outpatient, remote monitor, or member-reported device",
+          "keywords": [
+            "outpatient",
+            "home monitor",
+            "remote",
+            "ambulatory"
+          ]
+        },
+        {
+          "key": "provider_credential",
+          "label": "Performing provider credential",
+          "type": "text",
+          "required": false,
+          "unit": null,
+          "options": null,
+          "timing": null,
+          "compliance_hint": "Capture the performing provider's signature/credential where the measure requires it",
+          "keywords": [
+            "MD",
+            "DO",
+            "NP",
+            "PA",
+            "electronically signed",
+            "signed by",
+            "attestation",
+            "credential"
+          ],
+          "evidence_role": "provider_credential"
+        }
+      ],
+      "exclusions": [
+        {
+          "key": "esrd_dialysis",
+          "label": "ESRD, dialysis, or kidney transplant",
+          "scope": "required",
+          "value_sets": [
+            "ESRD Diagnosis",
+            "Dialysis",
+            "Dialysis Procedure",
+            "Kidney Transplant"
+          ],
+          "codes": [],
+          "keywords": [
+            "end stage renal disease",
+            "esrd",
+            "dialysis",
+            "hemodialysis",
+            "kidney transplant",
+            "renal transplant"
+          ],
+          "applies_when": null,
+          "note": "ESRD, chronic dialysis, or a functioning kidney transplant retires the member",
+          "timing": "Any time in the member's history through the end of the measurement year"
+        },
+        {
+          "key": "pregnancy",
+          "label": "Pregnancy during the measurement year",
+          "scope": "required",
+          "value_sets": [
+            "Pregnancy",
+            "Pregnancy Diagnosis"
+          ],
+          "codes": [],
+          "keywords": [
+            "pregnancy",
+            "pregnant",
+            "gestation",
+            "prenatal"
+          ],
+          "applies_when": null,
+          "note": "Pregnancy retires the member",
+          "timing": "Any time during the measurement year"
+        }
+      ]
+    },
+    {
+      "measure_id": "BCS-E",
+      "measure_name": "Breast Cancer Screening",
+      "hybrid": false,
+      "source_pages": "example",
+      "eligible_population": {
+        "ages": "50-74",
+        "event_or_diagnosis": "Women in the eligible age range",
+        "continuous_enrollment": "October 1 two years prior through December 31 of the measurement year",
+        "anchor_date": "December 31 of the measurement year"
+      },
+      "measurement_period": {
+        "window": "The measurement year",
+        "lookback": "Mammogram within 27 months prior to the end of the measurement year"
+      },
+      "numerator": "One or more mammograms any time on or between October 1 two years prior and December 31 of the measurement year.",
+      "data_elements": [
+        {
+          "key": "mammogram_date",
+          "label": "Mammogram date",
+          "type": "date",
+          "required": true,
+          "unit": null,
+          "options": null,
+          "timing": "Within 27 months of the period end",
+          "compliance_hint": "Any mammogram in the 27-month look-back counts",
+          "keywords": [
+            "mammogram",
+            "mammography",
+            "breast imaging"
+          ]
+        },
+        {
+          "key": "mammogram_type",
+          "label": "Type",
+          "type": "text",
+          "required": false,
+          "unit": null,
+          "options": [
+            "Screening",
+            "Diagnostic",
+            "Digital breast tomosynthesis"
+          ],
+          "timing": null,
+          "compliance_hint": "Screening or diagnostic both qualify",
+          "keywords": [
+            "screening mammogram",
+            "diagnostic mammogram",
+            "tomosynthesis",
+            "3d mammogram"
+          ]
+        },
+        {
+          "key": "birads",
+          "label": "BI-RADS assessment",
+          "type": "text",
+          "required": false,
+          "unit": null,
+          "options": null,
+          "timing": null,
+          "compliance_hint": "Supporting context, not required for the numerator",
+          "keywords": [
+            "bi-rads",
+            "birads",
+            "breast imaging reporting"
+          ]
+        }
+      ],
+      "exclusions": [
+        {
+          "key": "bilateral_mastectomy",
+          "label": "Bilateral mastectomy",
+          "scope": "required",
+          "value_sets": [
+            "Bilateral Mastectomy",
+            "History of Bilateral Mastectomy",
+            "Unilateral Mastectomy",
+            "Clinical Unilateral Mastectomy",
+            "Unilateral Mastectomy Left",
+            "Unilateral Mastectomy Right"
+          ],
+          "codes": [],
+          "keywords": [
+            "bilateral mastectomy",
+            "mastectomy",
+            "history of mastectomy"
+          ],
+          "applies_when": null,
+          "note": "Compound: a documented BILATERAL mastectomy qualifies on its own; a UNILATERAL mastectomy qualifies only with the contralateral side (left AND right) or a documented history of the other. A lone 'mastectomy' mention is not sufficient \u2014 confirm laterality.",
+          "timing": "Any time in the member's history through the end of the measurement year",
+          "compound": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Upload patient profile · HEDIS{% endblock %}
+{% block body %}
+<div class="page-head"><h1>Upload patient profile</h1></div>
+
+{% if not pack %}
+<div class="notice warn">No rules pack loaded. Add one under <a href="{{ url_for('rules') }}">Rules</a> first.</div>
+{% else %}
+<form class="card form" method="post" enctype="multipart/form-data" action="{{ url_for('upload') }}">
+  <input type="hidden" name="year" value="{{ pack.source.measurement_year }}">
+
+  <section>
+    <h2>Medical record</h2>
+    <label class="field">
+      <span>Chart file (PDF or .txt)</span>
+      <input type="file" name="chart" accept=".pdf,.txt" required>
+    </label>
+    <p class="muted small">The full text is extracted with a page-offset map so every finding can be
+      traced back to a page and character range in the source.</p>
+  </section>
+
+  <section>
+    <h2>Member</h2>
+    <div class="row">
+      <label class="field"><span>Name</span><input name="member_name" placeholder="Jane A. Doe"></label>
+      <label class="field"><span>Member ID</span><input name="member_id" placeholder="auto"></label>
+    </div>
+    <div class="row">
+      <label class="field"><span>Date of birth</span><input type="date" name="member_dob"></label>
+      <label class="field"><span>Age</span><input type="number" name="member_age" min="0" max="130"></label>
+      <label class="field"><span>Sex</span>
+        <select name="member_sex"><option value="">—</option><option>F</option><option>M</option></select>
+      </label>
+    </div>
+    <p class="muted small">Age turns the exclusion age-gate from surfaced into evaluated. Name + DOB are used
+      for the gap-closure member-match gate.</p>
+  </section>
+
+  <section>
+    <h2>Workflow</h2>
+    <div class="radio-row">
+      <label><input type="radio" name="workflow" value="chase" checked> Chart chase <span class="muted">(plan pulls the record)</span></label>
+      <label><input type="radio" name="workflow" value="gap_closure"> Gap closure <span class="muted">(provider submits — adds member-match gate + proposed outcome)</span></label>
+    </div>
+  </section>
+
+  <section>
+    <h2>Identified measures &amp; gap in care</h2>
+    <p class="muted small">Select the HEDIS measures assigned to this member ({{ pack.source.measurement_year }})
+      and set each gap status. Gap-closed / already-excluded measures are skipped unless you re-review with Force.</p>
+    <table class="grid compact">
+      <thead><tr><th></th><th>Measure</th><th>Type</th><th>Gap status</th><th>Last DOS</th></tr></thead>
+      <tbody>
+        {% for m in pack.measures %}
+        <tr>
+          <td><input type="checkbox" name="measure" value="{{ m.measure_id }}" id="m_{{ m.measure_id }}"></td>
+          <td><label for="m_{{ m.measure_id }}"><strong>{{ m.measure_id }}</strong> — {{ m.measure_name }}</label></td>
+          <td class="muted small">{{ 'Hybrid' if m.hybrid else 'Admin-only' }}</td>
+          <td>
+            <select name="status_{{ m.measure_id }}">
+              <option value="open">open</option>
+              <option value="gap" selected>gap</option>
+              <option value="gap_closed">gap_closed</option>
+              <option value="excluded">excluded</option>
+            </select>
+          </td>
+          <td><input type="date" name="dos_{{ m.measure_id }}"></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <div class="form-actions">
+    <button class="btn primary" type="submit">Upload &amp; create profile</button>
+    <a class="btn" href="{{ url_for('index') }}">Cancel</a>
+  </div>
+</form>
+{% endif %}
+{% endblock %}

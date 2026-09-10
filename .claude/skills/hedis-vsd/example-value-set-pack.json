@@ -1,0 +1,117 @@
+{
+  "vsd_version": "1.0",
+  "source": {
+    "publisher": "NCQA",
+    "directory_title": "HEDIS MY2027 Value Set Directory (ILLUSTRATIVE sample)",
+    "measurement_year": "MY2027",
+    "effective": { "start": "2027-01-01", "end": "2027-12-31" },
+    "loaded_at": "2026-09-10",
+    "license": "ILLUSTRATIVE sample only — a handful of well-known codes per set to demonstrate the shape. NOT the licensed NCQA Value Set Directory; do not treat as complete or authoritative. Real deployments load the licensed directory. Internal use only."
+  },
+  "value_sets": {
+    "ESRD Diagnosis": {
+      "oid": "2.16.840.1.113883.3.464.1004.9000",
+      "codes": [
+        { "system": "ICD10CM", "code": "N18.6", "description": "End stage renal disease" },
+        { "system": "ICD10CM", "code": "Z99.2", "description": "Dependence on renal dialysis" }
+      ]
+    },
+    "Dialysis": {
+      "oid": "2.16.840.1.113883.3.464.1004.9001",
+      "codes": [
+        { "system": "CPT", "code": "90935", "description": "Hemodialysis, single evaluation" },
+        { "system": "CPT", "code": "90945", "description": "Dialysis procedure other than hemodialysis" }
+      ]
+    },
+    "Dialysis Procedure": {
+      "oid": "2.16.840.1.113883.3.464.1004.9002",
+      "codes": [
+        { "system": "CPT", "code": "90937", "description": "Hemodialysis, repeated evaluations" },
+        { "system": "HCPCS", "code": "G0257", "description": "Unscheduled dialysis, ESRD patient" }
+      ]
+    },
+    "Kidney Transplant": {
+      "oid": "2.16.840.1.113883.3.464.1004.9003",
+      "codes": [
+        { "system": "CPT", "code": "50360", "description": "Renal allotransplantation" },
+        { "system": "ICD10CM", "code": "Z94.0", "description": "Kidney transplant status" }
+      ]
+    },
+    "Pregnancy": {
+      "oid": "2.16.840.1.113883.3.464.1004.9010",
+      "codes": [
+        { "system": "ICD10CM", "code": "Z33.1", "description": "Pregnant state, incidental" }
+      ]
+    },
+    "Pregnancy Diagnosis": {
+      "oid": "2.16.840.1.113883.3.464.1004.9011",
+      "codes": [
+        { "system": "ICD10CM", "code": "O09.90", "description": "Supervision of high risk pregnancy, unspecified" }
+      ]
+    },
+    "Bilateral Mastectomy": {
+      "oid": "2.16.840.1.113883.3.464.1004.9020",
+      "codes": [
+        { "system": "ICD10PCS", "code": "0HTV0ZZ", "description": "Resection of bilateral breast, open" },
+        { "system": "ICD10CM", "code": "Z90.13", "description": "Acquired absence of bilateral breasts and nipples" }
+      ]
+    },
+    "History of Bilateral Mastectomy": {
+      "oid": "2.16.840.1.113883.3.464.1004.9021",
+      "codes": [
+        { "system": "ICD10CM", "code": "Z90.13", "description": "Acquired absence of bilateral breasts and nipples" }
+      ]
+    },
+    "Unilateral Mastectomy": {
+      "oid": "2.16.840.1.113883.3.464.1004.9022",
+      "codes": [
+        { "system": "CPT", "code": "19303", "description": "Mastectomy, simple, complete" }
+      ]
+    },
+    "Hospice Encounter": {
+      "oid": "2.16.840.1.113883.3.464.1004.9030",
+      "codes": [
+        { "system": "HCPCS", "code": "G0182", "description": "Physician supervision of hospice patient" },
+        { "system": "REV", "code": "0655", "description": "Hospice - inpatient respite care" }
+      ]
+    },
+    "Hospice Intervention": {
+      "oid": "2.16.840.1.113883.3.464.1004.9031",
+      "codes": [
+        { "system": "HCPCS", "code": "S9126", "description": "Hospice care, in the home, per diem" }
+      ]
+    },
+    "Palliative Care Procedures": {
+      "oid": "2.16.840.1.113883.3.464.1004.9040",
+      "codes": [
+        { "system": "HCPCS", "code": "G9054", "description": "Palliative care services" }
+      ]
+    },
+    "Palliative Care Observations": {
+      "oid": "2.16.840.1.113883.3.464.1004.9041",
+      "codes": [
+        { "system": "ICD10CM", "code": "Z51.5", "description": "Encounter for palliative care" }
+      ]
+    },
+    "Advanced Illness": {
+      "oid": "2.16.840.1.113883.3.464.1004.9050",
+      "codes": [
+        { "system": "ICD10CM", "code": "G30.9", "description": "Alzheimer's disease, unspecified" },
+        { "system": "ICD10CM", "code": "J44.9", "description": "Chronic obstructive pulmonary disease, unspecified" }
+      ]
+    },
+    "Frailty Diagnosis": {
+      "oid": "2.16.840.1.113883.3.464.1004.9051",
+      "codes": [
+        { "system": "ICD10CM", "code": "R54", "description": "Age-related physical debility (frailty)" },
+        { "system": "ICD10CM", "code": "R26.2", "description": "Difficulty in walking, not elsewhere classified" }
+      ]
+    },
+    "Frailty Device": {
+      "oid": "2.16.840.1.113883.3.464.1004.9052",
+      "codes": [
+        { "system": "HCPCS", "code": "E0143", "description": "Walker, folding, wheeled" }
+      ]
+    }
+  }
+}

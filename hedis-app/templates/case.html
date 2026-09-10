@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}{{ case.member.name or case.member.id }} · HEDIS{% endblock %}
+{% block body %}
+<div class="crumbs"><a href="{{ url_for('index') }}">Patients</a> / {{ case.member.name or case.member.id }}</div>
+
+{% if case.multi_patient and case.multi_patient.multi_patient %}
+<div class="notice warn multi-patient">
+  ⚠ <b>Possible multiple members in this document</b> — {{ case.multi_patient.reasons | join('; ') }}.
+  Findings must be confirmed against the correct member before use; do not auto-attribute.
+  <span class="muted small">(Deterministic intake screen — a reviewer confirms identity.)</span>
+</div>
+{% endif %}
+
+<div class="case-summary">
+  <div class="cs-top">
+    <div>
+      <div class="cs-title">
+        <span class="cs-id">{{ case.member.name or case.member.id }}</span>
+        <span class="chip status-{{ case.workflow }}">{{ case.workflow.replace('_',' ') }}</span>
+      </div>
+      <p class="cs-meta">
+        {{ case.member.id }}
+        {% if case.member.dob %} · DOB {{ case.member.dob }}{% endif %}
+        {% if case.member.age %} · age {{ case.member.age }}{% endif %}
+        {% if case.member.sex %} · {{ case.member.sex }}{% endif %}
+        · MY {{ case.measurement_year }}
+        · Chart: {{ case.chart_filename }}
+      </p>
+    </div>
+    <div class="head-actions">
+      <a class="btn" href="{{ url_for('case_source', case_id=case.id) }}" target="_blank">View original ↗</a>
+      <a class="btn" href="{{ url_for('case_broad', case_id=case.id) }}">Broad scan ↗</a>
+      <a class="btn" href="{{ url_for('case_audit', case_id=case.id) }}">Audit trail ↗</a>
+      <a class="btn" href="{{ url_for('export_case_csv', case_id=case.id) }}">Export CSV</a>
+      <a class="btn" href="{{ url_for('export_case_supplemental', case_id=case.id) }}">Supplemental</a>
+      <form method="post" action="{{ url_for('case_analyze', case_id=case.id) }}">
+        <button class="btn primary" type="submit">Analyze all measures</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="measure-list">
+{% for r in rows %}
+  {% set f = r.findings %}
+  {% set mr = (f.measure_result if f else {}) or {} %}
+  {% set ns = namespace(stage=1) %}
+  {% if f and f.status not in ('validation_failed','skipped_admin_resolved') %}{% set ns.stage = 2 %}{% endif %}
+  {% if f and f.decisions %}{% set ns.stage = 3 %}{% endif %}
+  {% if mr.reviewer_decision and mr.reviewer_decision != 'pending' %}{% set ns.stage = 4 %}{% endif %}
+  {% if f and f.qa %}{% set ns.stage = 5 %}{% endif %}
+  {% if f and f.qa and f.qa.state == 'qa passed' %}{% set ns.stage = 6 %}{% endif %}
+  <div class="card measure-card">
+    <div class="mc-head">
+      <div>
+        <span class="chip status-{{ r.state.admin_status or 'open' }}">{{ (r.state.admin_status or 'open').replace('_',' ') }}</span>
+        {% if f and f.escalations %}<span class="chip escalated" title="{{ f.escalations[-1].reason }}">⚑ escalated</span>{% endif %}
+        <h3>{{ r.measure_id }} — {{ r.measure.measure_name }}</h3>
+      </div>
+      <form method="post" action="{{ url_for('case_analyze', case_id=case.id) }}">
+        <input type="hidden" name="measure" value="{{ r.measure_id }}">
+        {% if r.state.admin_status in ('gap_closed','excluded') %}
+          <input type="hidden" name="force" value="1">
+          <button class="btn" type="submit">Re-review (force)</button>
+        {% else %}
+          <button class="btn" type="submit">Analyze</button>
+        {% endif %}
+      </form>
+    </div>
+
+    {% set steps = [('Uploaded','intake'),('Analyzed','data located'),('Reviewed','findings decided'),('Signed off','determination'),('Over-read','QA'),('Complete','')] %}
+    <div class="lifecycle">
+      {% for st in steps %}
+        {% set i = loop.index %}
+        <div class="lc-step {{ 'done' if i < ns.stage else ('current' if i == ns.stage else 'future') }}">
+          <div class="lc-num">{% if i < ns.stage %}✓{% else %}{{ i }}{% endif %}</div>
+          <div class="lc-text"><span class="lc-label">{{ st[0] }}</span>{% if st[1] %}<span class="lc-sub">{{ st[1] }}</span>{% endif %}</div>
+        </div>
+        {% if not loop.last %}<div class="lc-conn {{ 'done' if i < ns.stage }}"></div>{% endif %}
+      {% endfor %}
+    </div>
+
+    {% if f %}
+      {% if f.status == 'skipped_admin_resolved' %}
+        <p class="muted">Skipped: {{ f.reason }}</p>
+      {% elif f.status == 'validation_failed' %}
+        <div class="notice warn">Validation failed — {{ f.reason }}</div>
+      {% else %}
+        {% set s = f.summary %}
+        {% if s %}
+        <div class="stat-row">
+          <div class="stat"><b>{{ s.elements_found }}/{{ s.elements_total }}</b><span>elements found</span></div>
+          <div class="stat"><b>{{ s.required_missing }}</b><span>required missing</span></div>
+          <div class="stat"><b>{{ s.exclusions_proposed }}</b><span>exclusions proposed</span></div>
+          <div class="stat"><b>{{ s.anchored_evidence }}</b><span>anchored quotes</span></div>
+        </div>
+        {% if s.out_of_window_required or s.needs_review %}
+        <div class="flags-row">
+          {% if s.out_of_window_required %}<span class="flag-chip timing">⏱ {{ s.out_of_window_required }} required out of window</span>{% endif %}
+          {% if s.needs_review %}<span class="flag-chip review">⚑ {{ s.needs_review }} need review</span>{% endif %}
+        </div>
+        {% endif %}
+        {% endif %}
+        {% if f.gap_outcome %}
+          <div class="outcome outcome-{{ f.gap_outcome.status }}">
+            Proposed gap outcome: <b>{{ f.gap_outcome.status.replace('_',' ') }}</b>
+            <span class="muted small"> — {{ f.gap_outcome.rationale }}</span>
+          </div>
+        {% endif %}
+        {% if mr.reviewer_decision and mr.reviewer_decision != 'pending' %}
+          <div class="signoff-badge final-{{ mr.final_status }}">
+            Signed off: <b>{{ (mr.final_status or '').replace('_',' ') }}</b>
+            <span class="muted small">· {{ mr.reviewer_decision }} by {{ mr.decided_by }}</span>
+          </div>
+        {% endif %}
+        <div class="mc-foot">
+          <span class="muted small">Pass-1: {{ f.provider }} · analyzed {{ f.analyzed_at[:16].replace('T',' ') }}</span>
+          <a class="btn primary" href="{{ url_for('review', case_id=case.id, measure_id=r.measure_id) }}">Review evidence →</a>
+        </div>
+      {% endif %}
+    {% else %}
+      <p class="muted">Not analyzed yet.</p>
+    {% endif %}
+  </div>
+{% endfor %}
+</div>
+{% endblock %}

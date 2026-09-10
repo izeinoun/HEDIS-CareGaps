@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}QA / over-read queue · HEDIS{% endblock %}
+{% block body %}
+<div class="page-head">
+  <div>
+    <h1>QA / over-read queue &amp; worklist</h1>
+    <p class="muted small">Every analyzed chart×measure with its review state, assignment, and sign-off.
+      A second reviewer (Administrator) over-reads decisions and marks each QA-passed or needs-rework.</p>
+  </div>
+  <div class="head-actions">
+    <a class="btn" href="{{ url_for('export_queue_csv') }}">Export confirmed (CSV)</a>
+    <a class="btn" href="{{ url_for('export_queue_supplemental') }}">Supplemental data</a>
+  </div>
+</div>
+
+<form class="filters" method="get">
+  <label class="field inline"><span>Assignee</span>
+    <select name="assignee" onchange="this.form.submit()">
+      <option value="">Anyone</option>
+      {% for u in users %}<option value="{{ u.id }}" {{ 'selected' if filters.assignee == u.id }}>{{ u.name }}</option>{% endfor %}
+    </select>
+  </label>
+  <label class="field inline"><span>State</span>
+    <select name="state" onchange="this.form.submit()">
+      {% for s in ['', 'unreviewed', 'in review', 'reviewed', 'signed off', 'qa passed', 'needs rework'] %}
+        <option value="{{ s }}" {{ 'selected' if filters.state == s }}>{{ s or 'Any' }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  {% if filters.assignee or filters.state %}<a class="btn small" href="{{ url_for('queue') }}">Clear</a>{% endif %}
+</form>
+
+{% if not rows %}
+<div class="empty"><p>No case×measures match.</p></div>
+{% else %}
+<table class="grid" id="queue">
+  <thead>
+    <tr><th>Member</th><th>Measure</th><th>Proposals</th><th>Review</th><th>Result</th>
+        <th>Assignee</th><th>QA over-read</th></tr>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+      {% set f = row.f %}{% set mr = row.measure_result or {} %}{% set asg = row.assignment %}
+      <tr data-case="{{ f.case_id }}" data-measure="{{ f.measure_id }}">
+        <td><div class="member-name">{{ f._member.name or f._member.id }}</div>
+          <div class="muted small">{{ f._member.id }}</div></td>
+        <td><a href="{{ url_for('review', case_id=f.case_id, measure_id=f.measure_id) }}"><b>{{ f.measure_id }}</b></a>
+          <div class="muted small">{{ f.measure_name }}</div></td>
+        <td>
+          {% if f.status in ('skipped_admin_resolved','validation_failed') %}
+            <span class="muted small">{{ f.status.replace('_',' ') }}</span>
+          {% else %}
+            <span class="tag">{{ f.summary.elements_found }} el</span>
+            <span class="tag">{{ f.summary.exclusions_proposed }} excl</span>
+            {% if f.summary.required_missing %}<span class="tag warn">{{ f.summary.required_missing }} gap</span>{% endif %}
+          {% endif %}
+        </td>
+        <td><span class="qstate state-{{ row.state|replace(' ','-') }}">{{ row.state }}</span>
+          {% if f.escalations %}<span class="chip escalated" title="{{ f.escalations[-1].reason }} — {{ f.escalations[-1].by.name }}">⚑ escalated</span>{% endif %}</td>
+        <td class="small">
+          {% if mr.reviewer_decision and mr.reviewer_decision != 'pending' %}
+            <span class="final final-{{ mr.final_status }}">{{ (mr.final_status or '').replace('_',' ') }}</span>
+            <div class="muted xsmall">{{ mr.reviewer_decision }}</div>
+          {% else %}<span class="muted">{{ (mr.proposed_status or '—').replace('_',' ') }}</span>{% endif %}
+        </td>
+        <td>
+          <select class="assign">
+            <option value="">— unassigned —</option>
+            {% for u in users %}<option value="{{ u.id }}" {{ 'selected' if asg and asg.assignee_id == u.id }}>{{ u.name }}</option>{% endfor %}
+          </select>
+        </td>
+        <td>
+          {% if f.status not in ('skipped_admin_resolved','validation_failed') %}
+          <div class="qa-actions role-qa">
+            <button class="btn small qa" data-state="qa passed">QA pass</button>
+            <button class="btn small qa" data-state="needs rework">Rework</button>
+          </div>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+<script>
+async function post(url, body) {
+  const r = await fetch(url, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body) });
+  return { ok: r.ok, status: r.status, data: await r.json().catch(() => ({})) };
+}
+document.querySelectorAll("button.qa").forEach(b => b.addEventListener("click", async () => {
+  const tr = b.closest("tr");
+  const res = await post("{{ url_for('queue_qa') }}", { case_id: tr.dataset.case, measure_id: tr.dataset.measure, state: b.dataset.state, actor_id: window.ACTOR });
+  if (res.ok) {
+    const cell = tr.querySelector(".qstate");
+    cell.textContent = b.dataset.state; cell.className = "qstate state-" + b.dataset.state.replace(/ /g,"-");
+  } else { alert(res.data.error || "Action failed"); }
+}));
+document.querySelectorAll("select.assign").forEach(s => s.addEventListener("change", async () => {
+  const tr = s.closest("tr");
+  await post("{{ url_for('queue_assign') }}", { case_id: tr.dataset.case, measure_id: tr.dataset.measure, assignee_id: s.value, actor_id: window.ACTOR });
+}));
+</script>
+{% endblock %}

@@ -1,0 +1,23 @@
+{
+  "config_version": "1.0",
+  "source": {
+    "basis": "CMS Star Ratings weighting as defaults (outcome/intermediate measures weighted higher than process measures) — plan-overridable, not from the NCQA spec.",
+    "measurement_year": "MY2027",
+    "updated_at": "2026-09-10",
+    "disclaimer": "Operational priority weights for review triage. Plan/Star policy, not a clinical or NCQA value."
+  },
+  "defaults": { "weight": 1.0 },
+  "measures": {
+    "CBP":   { "weight": 3.0, "domain": "intermediate_outcome", "label": "Controlling High Blood Pressure", "star_measure": true },
+    "BCS-E": { "weight": 1.0, "domain": "process",              "label": "Breast Cancer Screening",         "star_measure": true }
+  },
+  "scoring": {
+    "closable_bonus": 0.6,
+    "partial_bonus": 0.25,
+    "partial_missing_max": 2,
+    "needs_review_penalty": 0.1,
+    "urgency_window_days": 90,
+    "urgency_per_30d": 0.5,
+    "urgency_cap": 1.5
+  }
+}

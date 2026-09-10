@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Value Set Directory · HEDIS{% endblock %}
+{% block body %}
+{% macro codes_table(codes) %}
+<table class="grid compact">
+  <thead><tr><th>System</th><th>Code</th><th>Description</th></tr></thead>
+  <tbody>
+    {% for c in codes %}<tr><td class="muted small">{{ c.system }}</td><td><code>{{ c.code }}</code></td><td>{{ c.description or '' }}</td></tr>{% endfor %}
+  </tbody>
+</table>
+{% endmacro %}
+<div class="page-head"><h1>Value Set Directory</h1></div>
+
+{% if upload_report %}
+<div class="notice ok"><b>Directory loaded.</b>
+  <ul class="report">{% for line in upload_report %}<li class="{{ 'err' if line.startswith('ERROR') else ('warn' if line.startswith('WARN') else '') }}">{{ line }}</li>{% endfor %}</ul>
+</div>
+{% endif %}
+
+<details class="card admin-only">
+  <summary><b>Load NCQA VSD export → value-set pack</b> <span class="chip flag">Administrator</span></summary>
+  <form class="form" method="post" enctype="multipart/form-data" action="{{ url_for('vsd_upload') }}"
+        onsubmit="this.querySelector('[name=actor_id]').value = window.ACTOR || '';">
+    <input type="hidden" name="actor_id">
+    <div class="row">
+      <label class="field"><span>Directory export (.csv or .xlsx)</span><input type="file" name="directory" accept=".csv,.xlsx" required></label>
+      <label class="field"><span>Measurement year</span><input name="year" placeholder="MY2027" required></label>
+    </div>
+    <p class="muted small">Deterministic ingest (no LLM). Licensed internal content — one pack per year, kept separate
+      from the rules pack and never included in exports.</p>
+    <button class="btn primary" type="submit">Load directory</button>
+  </form>
+</details>
+
+{% if not pack %}
+<div class="notice warn">No value-set pack loaded. An Administrator can load the NCQA VSD export above.</div>
+{% else %}
+<div class="card pack-header">
+  <div class="pack-head-row">
+    <div>
+      <h2>{{ pack.source.directory_title }}</h2>
+      <p class="muted small">Version <b>{{ pack.source.measurement_year }}</b>
+        {% if pack.source.effective %}· effective {{ pack.source.effective.start }} → {{ pack.source.effective.end }}{% endif %}
+        · loaded {{ pack.source.loaded_at or '—' }} · {{ summary.value_sets }} value sets · {{ summary.codes }} codes</p>
+    </div>
+    {% if packs|length > 1 %}
+    <form method="get"><select name="year" onchange="this.form.submit()">
+      {% for p in packs %}<option value="{{ p.source.measurement_year }}" {{ 'selected' if p.source.measurement_year == pack.source.measurement_year }}>{{ p.source.measurement_year }}</option>{% endfor %}
+    </select></form>
+    {% endif %}
+  </div>
+  <p class="disclaimer">{{ pack.source.license }}</p>
+</div>
+
+<form method="get" class="vsd-search">
+  <input class="search" name="q" value="{{ q }}" placeholder="Search value sets, codes, or descriptions (e.g. Dialysis, 90935, N18.6)…">
+</form>
+
+{% if results is not none %}
+  <p class="muted small">{{ results|length }} value set(s) match “{{ q }}”.</p>
+  {% for r in results %}
+    <details class="card" open>
+      <summary><b>{{ r.value_set }}</b> <span class="muted small">{{ r.code_count }} codes{% if r.oid %} · OID {{ r.oid }}{% endif %}</span></summary>
+      {{ codes_table(r.matched_codes) }}
+    </details>
+  {% endfor %}
+{% else %}
+  {% for name, body in pack.value_sets.items() %}
+    <details class="card vsd-set" id="vs-{{ name|replace(' ','_') }}" {{ 'open' if focus == name }}>
+      <summary><b>{{ name }}</b> <span class="muted small">{{ body.codes|length }} codes{% if body.oid %} · OID {{ body.oid }}{% endif %}</span></summary>
+      {{ codes_table(body.codes) }}
+    </details>
+  {% endfor %}
+{% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,793 @@
+{
+  "workflow": "chase",
+  "mode": "targeted",
+  "measure_id": "CBP",
+  "measure_name": "Controlling High Blood Pressure",
+  "measurement_year": "MY2027",
+  "rules_version": {
+    "measurement_year": "MY2027",
+    "schema_version": "1.1",
+    "extracted_at": "2026-09-08",
+    "document_title": "HEDIS MY2027 Volume 2: Technical Specifications for Health Plans",
+    "document_url": "https://store.ncqa.org/hedis-my2027-volume-2.html"
+  },
+  "provider": "anthropic",
+  "case_context": {
+    "member_id": "M-7003",
+    "member_age": 72,
+    "admin_status": "gap",
+    "admin_exclusions_applied": [],
+    "last_dos": null,
+    "chased": true
+  },
+  "validation": null,
+  "elements": [
+    {
+      "element_key": "bp_date",
+      "element_label": "BP reading date",
+      "element_type": "date",
+      "required": true,
+      "unit": null,
+      "options": null,
+      "timing": "Most recent reading in the measurement year",
+      "compliance_hint": "Use the most recent reading on or before Dec 31",
+      "evidence_role": null,
+      "ai_value": "08/14/2027",
+      "ai_confidence": 0.9,
+      "evidence_text": "Date of service: 08/14/2027 Provider: S. Iyer, MD",
+      "evidence_anchored": true,
+      "status": "proposed",
+      "in_window": true,
+      "compliance": {
+        "checkable": false,
+        "meets": null,
+        "hint": "Use the most recent reading on or before Dec 31",
+        "basis": null
+      },
+      "needs_review": false,
+      "document_id": "doc_2683a09b5c58",
+      "page_number": 1,
+      "char_start": 116,
+      "char_end": 152
+    },
+    {
+      "element_key": "systolic",
+      "element_label": "Systolic",
+      "element_type": "numeric",
+      "required": true,
+      "unit": "mmHg",
+      "options": null,
+      "timing": "Most recent reading in the measurement year",
+      "compliance_hint": "Meets threshold when < 140",
+      "evidence_role": null,
+      "ai_value": "144",
+      "ai_confidence": 0.98,
+      "evidence_text": "Blood pressure (BP) 144/90 mmHg, outpatient.",
+      "evidence_anchored": true,
+      "status": "proposed",
+      "in_window": true,
+      "compliance": {
+        "checkable": true,
+        "meets": false,
+        "hint": "Meets threshold when < 140",
+        "basis": "144 < 140"
+      },
+      "needs_review": false,
+      "document_id": "doc_2683a09b5c58",
+      "page_number": 1,
+      "char_start": 312,
+      "char_end": 356
+    },
+    {
+      "element_key": "diastolic",
+      "element_label": "Diastolic",
+      "element_type": "numeric",
+      "required": true,
+      "unit": "mmHg",
+      "options": null,
+      "timing": "Most recent reading in the measurement year",
+      "compliance_hint": "Meets threshold when < 90",
+      "evidence_role": null,
+      "ai_value": "90",
+      "ai_confidence": 0.98,
+      "evidence_text": "Blood pressure (BP) 144/90 mmHg, outpatient.",
+      "evidence_anchored": true,
+      "status": "proposed",
+      "in_window": true,
+      "compliance": {
+        "checkable": true,
+        "meets": false,
+        "hint": "Meets threshold when < 90",
+        "basis": "90 < 90"
+      },
+      "needs_review": false,
+      "document_id": "doc_2683a09b5c58",
+      "page_number": 1,
+      "char_start": 312,
+      "char_end": 356
+    },
+    {
+      "element_key": "bp_setting",
+      "element_label": "Setting",
+      "element_type": "text",
+      "required": false,
+      "unit": null,
+      "options": [
+        "Outpatient",
+        "Remote monitoring",
+        "Member-reported device"
+      ],
+      "timing": null,
+      "compliance_hint": "Outpatient, remote monitor, or member-reported device",
+      "evidence_role": null,
+      "ai_value": "Outpatient",
+      "ai_confidence": 0.95,
+      "evidence_text": "Blood pressure (BP) 144/90 mmHg, outpatient.",
+      "evidence_anchored": true,
+      "status": "proposed",
+      "in_window": null,
+      "compliance": {
+        "checkable": false,
+        "meets": null,
+        "hint": "Outpatient, remote monitor, or member-reported device",
+        "basis": null
+      },
+      "needs_review": false,
+      "document_id": "doc_2683a09b5c58",
+      "page_number": 1,
+      "char_start": 312,
+      "char_end": 356
+    },
+    {
+      "element_key": "provider_credential",
+      "element_label": "Performing provider credential",
+      "element_type": "text",
+      "required": false,
+      "unit": null,
+      "options": null,
+      "timing": null,
+      "compliance_hint": "Capture the performing provider's signature/credential where the measure requires it",
+      "evidence_role": "provider_credential",
+      "ai_value": "MD",
+      "ai_confidence": 0.95,
+      "evidence_text": "Signed by S. Iyer, MD.",
+      "evidence_anchored": true,
+      "status": "proposed",
+      "in_window": null,
+      "compliance": {
+        "checkable": false,
+        "meets": null,
+        "hint": "Capture the performing provider's signature/credential where the measure requires it",
+        "basis": null
+      },
+      "needs_review": false,
+      "document_id": "doc_2683a09b5c58",
+      "page_number": 1,
+      "char_start": 357,
+      "char_end": 379
+    }
+  ],
+  "exclusions": [
+    {
+      "rule_key": "esrd_dialysis",
+      "rule_label": "ESRD, dialysis, or kidney transplant",
+      "scope": "required",
+      "origin": "measure",
+      "note": "ESRD, chronic dialysis, or a functioning kidney transplant retires the member",
+      "timing": "Any time in the member's history through the end of the measurement year",
+      "applies_when": null,
+      "age_check": "not_applicable",
+      "already_applied": false,
+      "value_set_name": "ESRD Diagnosis",
+      "matched_term": "End stage renal disease",
+      "ai_confidence": 0.812,
+      "evidence_text": "S NOTE Patient: Priya Anand DOB: 02/20/1955 MRN: M-7003 Sex: F Date of service: 08/14/2027 Provider: S. Iyer, MD ASSESSMENT & PLAN 1. End stage renal disease. Patient receives hemodialysis three times weekly at the dialysis center. 2. Essential hypertension. Blood pressure (BP) 144/90 mmHg, outpatient. Signed by S.",
+      "source_hint": null,
+      "needs_file_confirmation": false,
+      "compound": false,
+      "components": null,
+      "threshold": null,
+      "threshold_note": null,
+      "disposition": "proposed",
+      "needs_review": false,
+      "document_id": "doc_2683a09b5c58",
+      "page_number": 1,
+      "char_start": 187,
+      "char_end": 210
+    },
+    {
+      "rule_key": "esrd_dialysis",
+      "rule_label": "ESRD, dialysis, or kidney transplant",
+      "scope": "required",
+      "origin": "measure",
+      "note": "ESRD, chronic dialysis, or a functioning kidney transplant retires the member",
+      "timing": "Any time in the member's history through the end of the measurement year",
+      "applies_when": null,
+      "age_check": "not_applicable",
+      "already_applied": false,
+      "value_set_name": "ESRD Diagnosis",
+      "matched_term": "hemodialysis",
+      "ai_confidence": 0.72,
+      "evidence_text": "/20/1955 MRN: M-7003 Sex: F Date of service: 08/14/2027 Provider: S. Iyer, MD ASSESSMENT & PLAN 1. End stage renal disease. Patient receives hemodialysis three times weekly at the dialysis center. 2. Essential hypertension. Blood pressure (BP) 144/90 mmHg, outpatient. Signed by S. Iyer, MD.",
+      "source_hint": null,
+      "needs_file_confirmation": false,
+      "compound": false,
+      "components": null,
+      "threshold": null,
+      "threshold_note": null,
+      "disposition": "proposed",
+      "needs_review": false,
+      "document_id": "doc_2683a09b5c58",
+      "page_number": 1,
+      "char_start": 229,
+      "char_end": 241
+    },
+    {
+      "rule_key": "esrd_dialysis",
+      "rule_label": "ESRD, dialysis, or kidney transplant",
+      "scope": "required",
+      "origin": "measure",
+      "note": "ESRD, chronic dialysis, or a functioning kidney transplant retires the member",
+      "timing": "Any time in the member's history through the end of the measurement year",
+      "applies_when": null,
+      "age_check": "not_applicable",
+      "already_applied": false,
+      "value_set_name": "ESRD Diagnosis",
+      "matched_term": "dialysis",
+      "ai_confidence": 0.687,
+      "evidence_text": "Date of service: 08/14/2027 Provider: S. Iyer, MD ASSESSMENT & PLAN 1. End stage renal disease. Patient receives hemodialysis three times weekly at the dialysis center. 2. Essential hypertension. Blood pressure (BP) 144/90 mmHg, outpatient. Signed by S. Iyer, MD.",
+      "source_hint": null,
+      "needs_file_confirmation": false,
+      "compound": false,
+      "components": null,
+      "threshold": null,
+      "threshold_note": null,
+      "disposition": "proposed",
+      "needs_review": true,
+      "document_id": "doc_2683a09b5c58",
+      "page_number": 1,
+      "char_start": 268,
+      "char_end": 276
+    }
+  ],
+  "gap_outcome": null,
+  "substantiation": {
+    "valid_data_present": true,
+    "substantiating_elements": [
+      "bp_date",
+      "systolic",
+      "diastolic"
+    ],
+    "missing_elements": [],
+    "next_step": "review_required",
+    "note": "Proposed substantiation and next step for reviewer confirmation; not a compliance determination. QMRM entry (X-5) and provider contact (X-8) are out of scope."
+  },
+  "measure_result": {
+    "proposed_status": "numerator_evidence_found",
+    "proposed_basis": "All required data elements are documented with anchored evidence.",
+    "reviewer_decision": "modified",
+    "final_status": "exclusion_applied",
+    "decided_by": "Dana Cole (Reviewer)",
+    "decided_at": "2026-09-10T22:44:25+00:00",
+    "note": "Active dialysis / ESRD \u2014 exclusion applies"
+  },
+  "audit_log": [
+    {
+      "seq": 1,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "system",
+      "action": "analysis_run",
+      "target": "CBP",
+      "detail": "targeted analysis, chase workflow"
+    },
+    {
+      "seq": 2,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "ai",
+      "action": "element_proposed",
+      "target": "bp_date",
+      "detail": "value=08/14/2027 confidence=0.9 anchored=True",
+      "ai_value": "08/14/2027"
+    },
+    {
+      "seq": 3,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "ai",
+      "action": "element_proposed",
+      "target": "systolic",
+      "detail": "value=144 confidence=0.98 anchored=True",
+      "ai_value": "144"
+    },
+    {
+      "seq": 4,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "ai",
+      "action": "element_proposed",
+      "target": "diastolic",
+      "detail": "value=90 confidence=0.98 anchored=True",
+      "ai_value": "90"
+    },
+    {
+      "seq": 5,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "ai",
+      "action": "element_proposed",
+      "target": "bp_setting",
+      "detail": "value=Outpatient confidence=0.95 anchored=True",
+      "ai_value": "Outpatient"
+    },
+    {
+      "seq": 6,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "ai",
+      "action": "element_proposed",
+      "target": "provider_credential",
+      "detail": "value=MD confidence=0.95 anchored=True",
+      "ai_value": "MD"
+    },
+    {
+      "seq": 7,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "ai",
+      "action": "exclusion_proposed",
+      "target": "esrd_dialysis",
+      "detail": "disposition=proposed matched='End stage renal disease'"
+    },
+    {
+      "seq": 8,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "ai",
+      "action": "exclusion_proposed",
+      "target": "esrd_dialysis",
+      "detail": "disposition=proposed matched='hemodialysis'"
+    },
+    {
+      "seq": 9,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "ai",
+      "action": "exclusion_proposed",
+      "target": "esrd_dialysis",
+      "detail": "disposition=proposed matched='dialysis'"
+    },
+    {
+      "seq": 10,
+      "ts": "2026-09-10T22:44:21+00:00",
+      "actor": "ai",
+      "action": "measure_result_proposed",
+      "target": "CBP",
+      "detail": "numerator_evidence_found"
+    },
+    {
+      "seq": 11,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "bp_date",
+      "detail": "kept 08/14/2027",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "ai_value": "08/14/2027"
+    },
+    {
+      "seq": 12,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "systolic",
+      "detail": "kept 144",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "ai_value": "144"
+    },
+    {
+      "seq": 13,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "diastolic",
+      "detail": "kept 90",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "ai_value": "90"
+    },
+    {
+      "seq": 14,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "bp_setting",
+      "detail": "kept Outpatient",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "ai_value": "Outpatient"
+    },
+    {
+      "seq": 15,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "provider_credential",
+      "detail": "kept MD",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "ai_value": "MD"
+    },
+    {
+      "seq": 16,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "esrd_dialysis",
+      "detail": "kept ESRD, dialysis, or kidney transplant",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "ai_value": "ESRD, dialysis, or kidney transplant"
+    },
+    {
+      "seq": 17,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "esrd_dialysis",
+      "detail": "kept ESRD, dialysis, or kidney transplant",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "ai_value": "ESRD, dialysis, or kidney transplant"
+    },
+    {
+      "seq": 18,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "esrd_dialysis",
+      "detail": "kept ESRD, dialysis, or kidney transplant",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "ai_value": "ESRD, dialysis, or kidney transplant"
+    },
+    {
+      "seq": 19,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "measure_result_modified",
+      "target": "CBP",
+      "detail": "final_status=exclusion_applied",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      }
+    },
+    {
+      "seq": 20,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "bp_date",
+      "detail": "kept 08/14/2027",
+      "by": {
+        "id": "u_overreader",
+        "name": "Sam Ortiz",
+        "role": "Over-reader"
+      },
+      "ai_value": "08/14/2027"
+    },
+    {
+      "seq": 21,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "systolic",
+      "detail": "kept 144",
+      "by": {
+        "id": "u_overreader",
+        "name": "Sam Ortiz",
+        "role": "Over-reader"
+      },
+      "ai_value": "144"
+    },
+    {
+      "seq": 22,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "diastolic",
+      "detail": "kept 90",
+      "by": {
+        "id": "u_overreader",
+        "name": "Sam Ortiz",
+        "role": "Over-reader"
+      },
+      "ai_value": "90"
+    },
+    {
+      "seq": 23,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "bp_setting",
+      "detail": "kept Outpatient",
+      "by": {
+        "id": "u_overreader",
+        "name": "Sam Ortiz",
+        "role": "Over-reader"
+      },
+      "ai_value": "Outpatient"
+    },
+    {
+      "seq": 24,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "provider_credential",
+      "detail": "kept MD",
+      "by": {
+        "id": "u_overreader",
+        "name": "Sam Ortiz",
+        "role": "Over-reader"
+      },
+      "ai_value": "MD"
+    },
+    {
+      "seq": 25,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "esrd_dialysis",
+      "detail": "kept ESRD, dialysis, or kidney transplant",
+      "by": {
+        "id": "u_overreader",
+        "name": "Sam Ortiz",
+        "role": "Over-reader"
+      },
+      "ai_value": "ESRD, dialysis, or kidney transplant"
+    },
+    {
+      "seq": 26,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "esrd_dialysis",
+      "detail": "kept ESRD, dialysis, or kidney transplant",
+      "by": {
+        "id": "u_overreader",
+        "name": "Sam Ortiz",
+        "role": "Over-reader"
+      },
+      "ai_value": "ESRD, dialysis, or kidney transplant"
+    },
+    {
+      "seq": 27,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "esrd_dialysis",
+      "detail": "kept ESRD, dialysis, or kidney transplant",
+      "by": {
+        "id": "u_overreader",
+        "name": "Sam Ortiz",
+        "role": "Over-reader"
+      },
+      "ai_value": "ESRD, dialysis, or kidney transplant"
+    },
+    {
+      "seq": 28,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "measure_result_modified",
+      "target": "CBP",
+      "detail": "final_status=exclusion_applied (2nd read)",
+      "by": {
+        "id": "u_overreader",
+        "name": "Sam Ortiz",
+        "role": "Over-reader"
+      }
+    },
+    {
+      "seq": 29,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "reviewer",
+      "action": "qa_over_read",
+      "target": "CBP",
+      "detail": "QA qa passed",
+      "by": {
+        "id": "u_overreader",
+        "name": "Sam Ortiz",
+        "role": "Over-reader"
+      }
+    }
+  ],
+  "summary": {
+    "elements_total": 5,
+    "elements_found": 5,
+    "required_missing": 0,
+    "required_missing_keys": [],
+    "exclusions_proposed": 3,
+    "exclusions_already_applied": 0,
+    "mean_confidence": 0.952,
+    "anchored_evidence": 5,
+    "needs_review": 1,
+    "out_of_window_required": 0
+  },
+  "disclaimer": "AI proposals only. Measure compliance, numerator status, and final exclusion application are determined by the reviewer, not by this analysis.",
+  "case_id": "487076233e82",
+  "analyzed_at": "2026-09-10T22:44:25+00:00",
+  "decisions": {
+    "el:bp_date": {
+      "action": "confirm",
+      "final_value": "08/14/2027",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "at": "2026-09-10T22:44:25+00:00"
+    },
+    "el:systolic": {
+      "action": "confirm",
+      "final_value": "144",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "at": "2026-09-10T22:44:25+00:00"
+    },
+    "el:diastolic": {
+      "action": "confirm",
+      "final_value": "90",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "at": "2026-09-10T22:44:25+00:00"
+    },
+    "el:bp_setting": {
+      "action": "confirm",
+      "final_value": "Outpatient",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "at": "2026-09-10T22:44:25+00:00"
+    },
+    "el:provider_credential": {
+      "action": "confirm",
+      "final_value": "MD",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "at": "2026-09-10T22:44:25+00:00"
+    },
+    "ex:esrd_dialysis": {
+      "action": "confirm",
+      "final_value": "ESRD, dialysis, or kidney transplant",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "at": "2026-09-10T22:44:25+00:00"
+    }
+  },
+  "vsd_version": {
+    "measurement_year": "MY2027",
+    "effective": {
+      "start": "2027-01-01",
+      "end": "2027-12-31"
+    },
+    "loaded_at": "2026-09-10"
+  },
+  "document_id": "doc_2683a09b5c58",
+  "source_document": {
+    "document_id": "doc_2683a09b5c58",
+    "filename": "priya_anand.txt"
+  },
+  "second_read": {
+    "decisions": {
+      "el:bp_date": {
+        "action": "confirm",
+        "final_value": "08/14/2027",
+        "by": {
+          "id": "u_overreader",
+          "name": "Sam Ortiz",
+          "role": "Over-reader"
+        },
+        "at": "2026-09-10T22:44:25+00:00"
+      },
+      "el:systolic": {
+        "action": "confirm",
+        "final_value": "144",
+        "by": {
+          "id": "u_overreader",
+          "name": "Sam Ortiz",
+          "role": "Over-reader"
+        },
+        "at": "2026-09-10T22:44:25+00:00"
+      },
+      "el:diastolic": {
+        "action": "confirm",
+        "final_value": "90",
+        "by": {
+          "id": "u_overreader",
+          "name": "Sam Ortiz",
+          "role": "Over-reader"
+        },
+        "at": "2026-09-10T22:44:25+00:00"
+      },
+      "el:bp_setting": {
+        "action": "confirm",
+        "final_value": "Outpatient",
+        "by": {
+          "id": "u_overreader",
+          "name": "Sam Ortiz",
+          "role": "Over-reader"
+        },
+        "at": "2026-09-10T22:44:25+00:00"
+      },
+      "el:provider_credential": {
+        "action": "confirm",
+        "final_value": "MD",
+        "by": {
+          "id": "u_overreader",
+          "name": "Sam Ortiz",
+          "role": "Over-reader"
+        },
+        "at": "2026-09-10T22:44:25+00:00"
+      },
+      "ex:esrd_dialysis": {
+        "action": "confirm",
+        "final_value": "ESRD, dialysis, or kidney transplant",
+        "by": {
+          "id": "u_overreader",
+          "name": "Sam Ortiz",
+          "role": "Over-reader"
+        },
+        "at": "2026-09-10T22:44:25+00:00"
+      }
+    },
+    "measure_result": {
+      "proposed_status": "numerator_evidence_found",
+      "proposed_basis": null,
+      "reviewer_decision": "modified",
+      "final_status": "exclusion_applied",
+      "decided_by": "Sam Ortiz (Over-reader)",
+      "decided_at": "2026-09-10T22:44:25+00:00",
+      "note": "Concur \u2014 dialysis exclusion"
+    }
+  },
+  "qa": {
+    "state": "qa passed",
+    "reviewer": "Sam Ortiz (Over-reader)",
+    "note": null,
+    "at": "2026-09-10T22:44:25+00:00"
+  }
+}

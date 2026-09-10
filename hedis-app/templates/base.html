@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}HEDIS Care-Gap Analysis{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body>
+{% set ep = request.endpoint %}
+{% set nc = nav_counts or {} %}
+<div class="app">
+  <aside class="sidebar">
+    <div class="side-top">
+      <a class="brand" href="{{ url_for('index') }}"><span class="wordmark">HEDIS</span> <span class="brand-dim">Care-Gap</span></a>
+      <button class="collapse-btn" id="collapse-btn" type="button" aria-label="Collapse sidebar">
+        <span aria-hidden="true">«</span> <span class="lbl">Collapse</span>
+      </button>
+    </div>
+    <nav class="side-nav">
+      <div class="nav-section">Care-gap review</div>
+      <a class="nav-item {{ 'active' if ep == 'index' }}" href="{{ url_for('index') }}">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span class="lbl">Patients</span>{% if nc.patients %}<b class="nav-count">{{ nc.patients }}</b>{% endif %}
+      </a>
+      <a class="nav-item {{ 'active' if ep == 'worklist' }}" href="{{ url_for('worklist') }}">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3.5" cy="6" r="1.2"/><circle cx="3.5" cy="12" r="1.2"/><circle cx="3.5" cy="18" r="1.2"/></svg>
+        <span class="lbl">Worklist</span>{% if nc.worklist %}<b class="nav-count">{{ nc.worklist }}</b>{% endif %}
+      </a>
+      <a class="nav-item role-qa {{ 'active' if ep == 'queue' }}" href="{{ url_for('queue') }}">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+        <span class="lbl">QA queue</span>{% if nc.qa %}<b class="nav-count">{{ nc.qa }}</b>{% endif %}
+      </a>
+      <div class="nav-section">Analytics</div>
+      <a class="nav-item {{ 'active' if ep == 'analytics' }}" href="{{ url_for('analytics') }}">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="20" x2="4" y2="10"/><line x1="10" y1="20" x2="10" y2="4"/><line x1="16" y1="20" x2="16" y2="13"/><line x1="22" y1="20" x2="2" y2="20"/></svg>
+        <span class="lbl">Analytics</span>
+      </a>
+      <div class="nav-section">Reference data</div>
+      <a class="nav-item {{ 'active' if ep == 'rules' }}" href="{{ url_for('rules') }}">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v4H4z"/><path d="M4 12h10"/><path d="M4 17h7"/></svg>
+        <span class="lbl">Rules</span>
+      </a>
+      <a class="nav-item {{ 'active' if ep == 'vsd_view' }}" href="{{ url_for('vsd_view') }}">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg>
+        <span class="lbl">VSD</span>
+      </a>
+    </nav>
+    <div class="side-foot">
+      <label class="user-select" title="Acting user — stamps every decision and audit entry">
+        <span class="ur-role" id="ur-role"></span>
+        <select id="acting-user">
+          {% for u in users %}<option value="{{ u.id }}" data-role="{{ u.role }}">{{ u.name }} · {{ u.role }}</option>{% endfor %}
+        </select>
+      </label>
+      <span class="provider-pill {{ 'on' if has_key else 'off' }}" title="Pass-1 extraction provider">
+        <i class="dot"></i><span>{{ 'Claude Opus 4.8' if has_key else 'Offline heuristic' }}</span>
+      </span>
+    </div>
+  </aside>
+
+  <div class="content">
+    <main class="main">{% block body %}{% endblock %}</main>
+    <footer class="foot">
+      <p class="provenance">AI proposals only. Measure status, numerator evidence, and final exclusion
+      application are determined by the reviewer, not by this analysis.</p>
+      <p class="colophon">hedis — care-gap analysis · penguin style</p>
+    </footer>
+  </div>
+</div>
+
+<script>
+  // Active-user selector — persisted; window.ACTOR is stamped on every action.
+  (function () {
+    const sel = document.getElementById("acting-user");
+    const roleTag = document.getElementById("ur-role");
+    const saved = localStorage.getItem("hedis_actor");
+    if (saved && [...sel.options].some(o => o.value === saved)) sel.value = saved;
+    const TAG = { "Reviewer": ["RVWR", "rvwr"], "Over-reader": ["OVRD", "ovrd"],
+                  "Administrator": ["ADMIN", "admin"], "Auditor": ["AUDIT", "audit"] };
+    function sync() {
+      window.ACTOR = sel.value;
+      const role = sel.options[sel.selectedIndex].dataset.role;
+      window.ACTOR_ROLE = role;
+      const [txt, cls] = TAG[role] || ["RVWR", "rvwr"];
+      roleTag.textContent = txt; roleTag.className = "ur-role " + cls;
+      localStorage.setItem("hedis_actor", sel.value);
+      document.body.dataset.role = role;
+    }
+    sel.addEventListener("change", sync); sync();
+    // Stamp the acting user onto form-POST actions (analyze / rules upload / reset).
+    document.addEventListener("submit", (e) => {
+      const f = e.target; if (!/\/analyze|\/rules\/upload|\/admin\/reset-demo/.test(f.action || "")) return;
+      let inp = f.querySelector('input[name="actor_id"]');
+      if (!inp) { inp = document.createElement("input"); inp.type = "hidden"; inp.name = "actor_id"; f.appendChild(inp); }
+      inp.value = window.ACTOR || "";
+    }, true);
+    // Sidebar collapse — persisted.
+    const cb = document.getElementById("collapse-btn");
+    if (localStorage.getItem("hedis_side") === "1") document.body.classList.add("side-collapsed");
+    cb.addEventListener("click", () => {
+      const on = document.body.classList.toggle("side-collapsed");
+      localStorage.setItem("hedis_side", on ? "1" : "0");
+    });
+  })();
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

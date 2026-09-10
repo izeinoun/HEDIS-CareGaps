@@ -1,0 +1,23 @@
+{
+  "member": {
+    "id": "M-1029",
+    "name": "Jane A. Doe",
+    "age": 71,
+    "dob": "1954-03-02",
+    "sex": "F"
+  },
+  "measurement_year": "MY2027",
+  "assigned_measures": ["CBP", "BCS-E"],
+  "measure_state": {
+    "CBP": {
+      "admin_status": "gap",
+      "admin_exclusions_applied": [],
+      "last_dos": "2027-08-01"
+    },
+    "BCS-E": {
+      "admin_status": "gap_closed",
+      "admin_exclusions_applied": [],
+      "last_dos": "2026-11-15"
+    }
+  }
+}

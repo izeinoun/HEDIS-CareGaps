@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Audit trail · {{ case.member.name or case.member.id }}{% endblock %}
+{% block body %}
+<div class="crumbs">
+  <a href="{{ url_for('index') }}">Patients</a> /
+  <a href="{{ url_for('case_view', case_id=case.id) }}">{{ case.member.name or case.member.id }}</a> / Audit trail
+</div>
+<div class="page-head">
+  <div>
+    <h1>Audit trail</h1>
+    <p class="muted small">Append-only. Every AI proposal and human action across this member's measures,
+      <b>most recent first</b> (times in UTC), with the original AI value preserved beside each edit.</p>
+  </div>
+</div>
+
+{% if not entries %}
+<div class="empty"><p>No audit events yet — analyze a measure first.</p></div>
+{% else %}
+<div class="timeline">
+  {% for e in entries %}
+  <div class="tl-row actor-{{ e.actor }}">
+    <div class="tl-when">{{ (e.ts or '')[:19]|replace('T',' ') }} <span class="muted xsmall">UTC</span></div>
+    <div class="tl-dot"></div>
+    <div class="tl-body">
+      <span class="tl-actor {{ e.actor }}">{{ e.actor }}</span>
+      <span class="tl-action">{{ e.action.replace('_',' ') }}</span>
+      <span class="chip small">{{ e.measure_id }}</span>
+      <span class="tl-target">{{ e.target }}</span>
+      <div class="tl-detail muted small">{{ e.detail }}
+        {% if e.ai_value is defined and e.ai_value is not none %}<span class="tag">AI: {{ e.ai_value }}</span>{% endif %}
+        {% if e.by %}<span class="tl-by">— {{ e.by.name }} ({{ e.by.role }})</span>{% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block title %}Rules admin · HEDIS{% endblock %}
+{% block body %}
+<div class="page-head"><h1>Rules admin</h1></div>
+
+{% if upload_report %}
+<div class="notice ok">
+  <b>Pack generated.</b> Coverage report:
+  <ul class="report">{% for line in upload_report %}<li class="{{ 'err' if line.startswith('ERROR') else ('warn' if line.startswith('WARN') else '') }}">{{ line }}</li>{% endfor %}</ul>
+</div>
+{% endif %}
+
+<details class="card admin-only">
+  <summary><b>Upload NCQA spec PDF → generate a rules pack</b> <span class="chip flag">Administrator</span></summary>
+  {% if not has_key %}
+    <p class="muted">Add an Anthropic API key (project <code>anthropickey</code> file) to enable pack generation from a spec PDF.</p>
+  {% else %}
+  <form class="form" method="post" enctype="multipart/form-data" action="{{ url_for('rules_upload') }}"
+        onsubmit="document.getElementById('rules-actor').value = window.ACTOR || '';">
+    <input type="hidden" name="actor_id" id="rules-actor">
+    <div class="row">
+      <label class="field"><span>Spec PDF (e.g. HEDIS MY2027 Volume 2)</span><input type="file" name="spec" accept=".pdf" required></label>
+      <label class="field"><span>Measurement year</span><input name="year" placeholder="MY2027" required></label>
+    </div>
+    <p class="muted small">The spec text is converted to rules with Claude, then validated. One pack per year — a new
+      upload is a new pack, never a merge. Read-only afterwards: corrections come from regenerating off the source.</p>
+    <button class="btn primary" type="submit">Generate pack</button>
+  </form>
+  {% endif %}
+</details>
+
+{% if not pack %}
+<div class="notice warn">No rules pack loaded.</div>
+{% else %}
+<div class="pack-header card">
+  <div class="pack-head-row">
+    <div>
+      <h2>{{ pack.source.document_title or 'HEDIS rules pack' }}</h2>
+      <p class="muted small">
+        Version <b>{{ pack.source.measurement_year }}</b> · schema {{ pack.schema_version }} ·
+        built {{ pack.source.extracted_at or '—' }} · {{ pack.source.publisher or 'NCQA' }}
+        {% if pack.source.pages %} · pp. {{ pack.source.pages }}{% endif %}
+      </p>
+    </div>
+    {% if packs|length > 1 %}
+    <form method="get">
+      <select name="year" onchange="this.form.submit()">
+        {% for p in packs %}
+        <option value="{{ p.source.measurement_year }}" {{ 'selected' if p.source.measurement_year == pack.source.measurement_year }}>
+          {{ p.source.measurement_year }}
+        </option>
+        {% endfor %}
+      </select>
+    </form>
+    {% endif %}
+  </div>
+  <p class="disclaimer">{{ pack.source.disclaimer }}</p>
+  {% if pack.source.document_url %}<a class="btn small" href="{{ pack.source.document_url }}" target="_blank">View source ↗</a>{% endif %}
+</div>
+
+<input id="rule-search" class="search" placeholder="Search measures, value sets, keywords…">
+
+{% if pack.universal_exclusions %}
+<h2 class="section">Universal exclusions</h2>
+<div class="cards">
+  {% for ex in pack.universal_exclusions %}
+  <div class="card excl-card searchable" data-text="{{ ex.label }} {{ ex.value_sets|join(' ') }} {{ ex.keywords|join(' ') }}">
+    <h4>{{ ex.label }} <span class="chip scope-{{ ex.scope }}">{{ ex.scope }}</span>
+      {% if ex.compound %}<span class="chip flag">compound</span>{% endif %}
+      {% if ex.source_hint == 'administrative' %}<span class="chip flag">file value</span>{% endif %}</h4>
+    {% if ex.note %}<p class="muted small">{{ ex.note }}</p>{% endif %}
+    <p class="small"><b>Value sets:</b> {% for vs in ex.value_sets %}<a href="{{ url_for('vsd_view') }}?vs={{ vs|urlencode }}" title="View codes in the VSD">{{ vs }}</a>{{ ', ' if not loop.last }}{% endfor %}</p>
+    {% if ex.applies_when %}<p class="small"><b>Applies when:</b> {{ ex.applies_when }}</p>{% endif %}
+    {% if ex.timing %}<p class="small muted"><b>Timing:</b> {{ ex.timing }}</p>{% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<h2 class="section">Measures</h2>
+{% for m in pack.measures %}
+<details class="card measure-detail searchable"
+  data-text="{{ m.measure_id }} {{ m.measure_name }} {% for e in m.data_elements %}{{ e.label }} {{ e.key }} {{ e.keywords|join(' ') }} {% endfor %}{% for ex in m.exclusions %}{{ ex.label }} {{ ex.value_sets|join(' ') }} {{ ex.keywords|join(' ') }} {% endfor %}">
+  <summary>
+    <b>{{ m.measure_id }}</b> — {{ m.measure_name }}
+    <span class="chip">{{ 'Hybrid' if m.hybrid else 'Admin-only' }}</span>
+    <span class="muted small">{{ m.data_elements|length }} elements · {{ m.exclusions|length }} exclusions
+      {% if m.source_pages %}· {{ m.source_pages }}{% endif %}</span>
+  </summary>
+
+  {% if m.numerator %}<p class="numerator"><b>Numerator:</b> {{ m.numerator }}</p>{% endif %}
+  {% if m.eligible_population %}
+  <p class="small muted">
+    {% if m.eligible_population.ages %}Ages {{ m.eligible_population.ages }}. {% endif %}
+    {{ m.eligible_population.event_or_diagnosis or '' }}
+    {% if m.measurement_period and m.measurement_period.lookback and m.measurement_period.lookback != 'None' %}
+    · Look-back: {{ m.measurement_period.lookback }}{% endif %}
+  </p>
+  {% endif %}
+
+  <h4>Data elements</h4>
+  <table class="grid compact">
+    <thead><tr><th>Label</th><th>Type</th><th>Req</th><th>Compliance hint</th><th>Keywords</th></tr></thead>
+    <tbody>
+      {% for e in m.data_elements %}
+      <tr>
+        <td>{{ e.label }} <span class="muted small">({{ e.key }})</span>
+          {% if e.evidence_role %}<span class="role-badge">{{ e.evidence_role.replace('_',' ') }}</span>{% endif %}</td>
+        <td class="muted small">{{ e.type }}{% if e.unit %} · {{ e.unit }}{% endif %}</td>
+        <td>{{ '●' if e.required else '' }}</td>
+        <td class="small">{{ e.compliance_hint or '' }}</td>
+        <td class="muted small">{{ e.keywords|join(', ') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if m.exclusions %}
+  <h4>Exclusions</h4>
+  {% for ex in m.exclusions %}
+  <div class="excl-inline">
+    <b>{{ ex.label }}</b> <span class="chip scope-{{ ex.scope }}">{{ ex.scope }}</span>
+    {% if ex.compound %}<span class="chip flag">compound</span>{% endif %}
+    {% if ex.source_hint == 'administrative' %}<span class="chip flag">file value</span>{% endif %}
+    <div class="small"><b>Value sets:</b> {% for vs in ex.value_sets %}<a href="{{ url_for('vsd_view') }}?vs={{ vs|urlencode }}" title="View codes in the VSD">{{ vs }}</a>{{ ', ' if not loop.last }}{% endfor %}</div>
+    {% if ex.codes %}<div class="small"><b>Codes:</b> {% for c in ex.codes %}<code>{{ c.system }} {{ c.code }}</code> {% endfor %}</div>{% endif %}
+    {% if ex.note %}<div class="small muted">{{ ex.note }}</div>{% endif %}
+    {% if ex.timing %}<div class="small muted"><b>Timing:</b> {{ ex.timing }}</div>{% endif %}
+  </div>
+  {% endfor %}
+  {% endif %}
+</details>
+{% endfor %}
+{% endif %}
+
+<script>
+  const search = document.getElementById('rule-search');
+  if (search) search.addEventListener('input', () => {
+    const q = search.value.toLowerCase();
+    document.querySelectorAll('.searchable').forEach(el => {
+      el.style.display = el.dataset.text.toLowerCase().includes(q) ? '' : 'none';
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Broad scan · {{ case.member.name or case.member.id }}{% endblock %}
+{% block body %}
+<div class="crumbs">
+  <a href="{{ url_for('index') }}">Patients</a> /
+  <a href="{{ url_for('case_view', case_id=case.id) }}">{{ case.member.name or case.member.id }}</a> /
+  Broad scan
+</div>
+<div class="page-head">
+  <div>
+    <h1>Cross-measure gap radar</h1>
+    <p class="muted small">One retrieved chart, every measure in MY {{ result.measurement_year }}. A deterministic
+      screen of which measures this chart shows evidence for — read once, review many.
+      {{ result.summary.measures_with_evidence }}/{{ result.summary.measures_scanned }} measures have chart evidence.</p>
+  </div>
+</div>
+
+<div class="cards">
+{% for r in result.broad_scan %}
+  <div class="card measure-card {{ 'has-ev' if r.has_evidence else 'no-ev' }}">
+    <div class="mc-head">
+      <div>
+        <span class="chip status-{{ r.admin_status or ('open' if r.assigned else 'unassigned') }}">
+          {{ r.admin_status or ('open' if r.assigned else 'not assigned') }}</span>
+        <h3>{{ r.measure_id }} — {{ r.measure_name }}</h3>
+      </div>
+      {% if r.has_evidence %}
+      <form method="post" action="{{ url_for('case_analyze', case_id=case.id) }}">
+        <input type="hidden" name="measure" value="{{ r.measure_id }}">
+        {% if not r.assigned %}<input type="hidden" name="force" value="1">{% endif %}
+        <button class="btn small" type="submit">Chase →</button>
+      </form>
+      {% endif %}
+    </div>
+
+    {% if r.has_evidence %}
+      <div class="stat-row">
+        <div class="stat"><b>{{ r.required_signal }}/{{ r.required_total }}</b><span>required signals</span></div>
+        <div class="stat"><b>{{ r.total_signal }}</b><span>element signals</span></div>
+        <div class="stat"><b>{{ r.exclusions|length }}</b><span>exclusion hits</span></div>
+      </div>
+      {% for s in r.element_signals %}
+      <div class="signal">
+        <b>{{ s.element_label }}</b>{% if s.required %} <span class="req">required</span>{% endif %}
+        <span class="tag">p.{{ s.page_number }}</span> <span class="muted small">“{{ s.matched_term }}”</span>
+        <div class="evidence small">…{{ s.evidence_text }}…</div>
+      </div>
+      {% endfor %}
+      {% for x in r.exclusions %}
+      <div class="signal excl">
+        <b>Exclusion: {{ x.rule_label }}</b> <span class="chip scope-{{ x.scope }}">{{ x.scope }}</span>
+        <span class="tag warn">{{ x.disposition.replace('_',' ') }}</span>
+        <div class="evidence ex small">…{{ x.evidence_text }}…</div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p class="muted small">No chart evidence for this measure's vocabulary.</p>
+    {% endif %}
+  </div>
+{% endfor %}
+</div>
+<p class="muted small" style="margin-top:16px">Signals mark that a measure's vocabulary appears in the chart — a
+  candidate to chase — not that a value was abstracted. Run the targeted analysis on a flagged measure to extract
+  and anchor its values. Per-chart candidate signals only; never a rate or a compliance call.</p>
+{% endblock %}

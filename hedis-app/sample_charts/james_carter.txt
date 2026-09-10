@@ -1,0 +1,9 @@
+NORTHSIDE CLINIC — PROGRESS NOTE
+Patient: James Carter        DOB: 04/11/1959       MRN: M-4400      Sex: M
+Date of service: 06/15/2027        Provider: L. Ortiz, MD
+
+VITALS
+Blood pressure (BP) 128/78 mmHg, seated, right arm, outpatient office reading.
+
+ASSESSMENT
+Essential hypertension, well controlled on lisinopril. No evidence of dialysis or ESRD.

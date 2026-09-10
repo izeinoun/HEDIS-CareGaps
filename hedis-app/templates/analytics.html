@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Review analytics · HEDIS{% endblock %}
+{% block body %}
+<div class="page-head">
+  <div>
+    <h1>Review analytics &amp; concordance</h1>
+    <p class="muted small">How reviewers acted on the AI's proposals and how the QA over-read concurred —
+      process metrics for tuning quality and the confidence gate. Not member-compliance rates.</p>
+  </div>
+</div>
+
+{% set a = report.ai_vs_final %}{% set mr = report.measure_result %}{% set o = report.over_read %}
+<div class="kpis">
+  <div class="kpi"><div class="kpi-v">{{ '%.0f%%'|format((a.agreement_rate or 0)*100) }}</div>
+    <div class="kpi-l">AI-vs-final agreement</div><div class="muted xsmall">{{ a.agree }}/{{ a.decisions }} kept</div></div>
+  <div class="kpi"><div class="kpi-v">{{ '%.0f%%'|format((a.value_change_rate or 0)*100) }}</div>
+    <div class="kpi-l">value-change rate</div><div class="muted xsmall">{{ a.edited }} edited · {{ a.rejected }} rejected</div></div>
+  <div class="kpi"><div class="kpi-v">{{ '%.0f%%'|format((mr.override_rate or 0)*100) }}</div>
+    <div class="kpi-l">sign-off override</div><div class="muted xsmall">{{ mr.overridden }}/{{ mr.signed_off }} overridden</div></div>
+  <div class="kpi"><div class="kpi-v">{{ ('%.0f%%'|format((o.concurrence_rate)*100)) if o.concurrence_rate is not none else '—' }}</div>
+    <div class="kpi-l">over-read concurrence</div>
+    <div class="muted xsmall">{{ o.concur }} concur · {{ o.rework }} rework · {{ o.qa_reviewed }} QA'd</div></div>
+</div>
+
+{% if report.gate_suggestion %}
+  {% set g = report.gate_suggestion %}
+  <div class="notice {{ 'warn' if g.recommendation == 'raise' else 'ok' }}">
+    <b>Confidence-gate suggestion:</b> {{ g.recommendation|upper }}
+    (current {{ g.current_gate }}{% if g.recommendation == 'raise' %} → suggested <b>{{ g.suggested_gate }}</b>{% endif %}).
+    {{ g.note }} <span class="muted small">{{ g.high_confidence_disagreements }}/{{ g.disagreements }} disagreements above the gate;
+    median disagreement confidence {{ g.disagreement_median_confidence }}.</span>
+  </div>
+{% endif %}
+
+<div class="card irr-card">
+  <h4>Independent double-read agreement <span class="muted small">(blind second reads)</span></h4>
+  {% if double_read.pairs %}
+  <div class="irr-row">
+    <div class="irr-kpi"><b>{{ '%.0f%%'|format((double_read.agreement_rate or 0)*100) }}</b><span>agreement</span></div>
+    <div class="irr-kpi"><b>{{ double_read.agree }}</b><span>agreed</span></div>
+    <div class="irr-kpi"><b>{{ double_read.disagree }}</b><span>disagreed</span></div>
+    <div class="irr-kpi"><b>{{ double_read.pairs }}</b><span>double-read pairs</span></div>
+  </div>
+  {% if double_read.disagreements %}
+  <table class="grid compact">
+    <thead><tr><th>Measure</th><th>Read 1</th><th>Read 2</th></tr></thead>
+    <tbody>
+      {% for d in double_read.disagreements %}
+      <tr><td><b>{{ d.measure_id }}</b></td>
+        <td><span class="final final-{{ d.read_1 }}">{{ (d.read_1 or '').replace('_',' ') }}</span></td>
+        <td><span class="final final-{{ d.read_2 }}">{{ (d.read_2 or '').replace('_',' ') }}</span></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="muted small">All double-reads agreed.</p>{% endif %}
+  {% else %}
+  <p class="muted small">No completed blind double-reads yet. Open a measure and use “Blind 2nd read →”
+    as a second reviewer to build an independent pair.</p>
+  {% endif %}
+</div>
+
+<div class="split-analytics">
+  <div class="card">
+    <h4>Agreement by measure</h4>
+    {% if report.by_measure %}
+    <table class="grid compact">
+      <thead><tr><th>Measure</th><th>Agree</th><th>Edit</th><th>Reject</th><th>Rate</th></tr></thead>
+      <tbody>
+        {% for mid, d in report.by_measure.items() %}
+        <tr><td><b>{{ mid }}</b></td><td>{{ d.agree }}</td><td>{{ d.edit }}</td><td>{{ d.reject }}</td>
+          <td><span class="agree-bar"><i style="width:{{ (d.agreement_rate or 0)*100 }}%"></i></span>
+            {{ '%.0f%%'|format((d.agreement_rate or 0)*100) }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}<p class="muted small">No decisions recorded yet.</p>{% endif %}
+  </div>
+
+  <div class="card">
+    <h4>Most-edited elements <span class="muted small">(prompt-tuning targets)</span></h4>
+    {% if report.by_element %}
+    <table class="grid compact">
+      <thead><tr><th>Element</th><th>Agree</th><th>Edit</th><th>Reject</th></tr></thead>
+      <tbody>
+        {% for ek, d in report.by_element.items() %}
+        <tr><td>{{ ek }}</td><td>{{ d.agree }}</td>
+          <td>{% if d.edit %}<span class="tag warn">{{ d.edit }}</span>{% else %}0{% endif %}</td>
+          <td>{% if d.reject %}<span class="tag warn">{{ d.reject }}</span>{% else %}0{% endif %}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}<p class="muted small">No element-level decisions yet.</p>{% endif %}
+  </div>
+</div>
+<p class="muted xsmall">{{ report.disclaimer }} Over-read concurrence is sequential (reviewer then QA); the
+  double-read agreement above is on independent blind second reads. Agreement capture only — not a reliability statistic.</p>
+{% endblock %}

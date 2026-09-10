@@ -1,0 +1,17 @@
+| # | Item |
+| ----- | :---- |
+| X-1 | Collecting documents from intake channels |
+| X-2 | Generating HEDIS reports |
+| X-3 | Handling members who switch product line mid-year |
+| X-4 | Determining member eligibility |
+| X-5 | Writing back to QMRM or a non-standard platform; entering data manually into QMRM |
+| X-6 | Drawing the medical record sample — sampling, oversample, MRSS, and replacement logic. *No direct source — added by Penguin; not among the customer's §A.2 exclusions* |
+| X-7 | Producing a reportable or certified hybrid rate. *The hybrid method combines claims-based (administrative) compliance with chart-review results from the sample to produce the reportable measure rate. That rate must come from NCQA-certified software and be signed off by a licensed auditor; the app supplies evidence into that process, it does not produce the rate* |
+| X-8 | Contacting providers — chasing charts and sending alerts and reminders |
+| X-9 | Calculating inter-rater reliability statistics |
+| X-10 | Generating abstractor qualification records |
+| X-11 | **Computing HEDIS measures.** The app extracts and evidences the data points QMRM uses to calculate compliance. It does not determine measure compliance, numerator status, or final exclusion application. |
+| X-12 | **Identifying care gaps.** Gaps are derived from claims by Horizon and arrive with the case. The app determines whether a submitted chart substantiates closure of an already identified gap. |
+| X-13 | Integrating with any Horizon system. All inputs arrive as file uploads. No inbound or outbound interface to QMRM, EMRs, HIEs, claims systems, or reporting systems. |
+| X-14 | **Processing structured data sources outside the chart** — claims data, laboratory feeds, and registry or supplemental data sources. Administrative compliance is determined by Horizon before a case reaches the app; what remains is chart evidence. |
+| X-15 | **Guaranteeing interpretation of degraded or ambiguous content.** Poor scans and handwritten passages are detected and flagged (4.5), and no value is ever inferred (A10) — but full-accuracy reading of degraded inputs is not guaranteed. |

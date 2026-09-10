@@ -1,0 +1,41 @@
+{
+  "id": "fe0a8f690bed",
+  "created_at": "2026-09-10T22:44:13+00:00",
+  "workflow": "chase",
+  "measurement_year": "MY2027",
+  "pack_year": "MY2027",
+  "chart_filename": "victor_nolan.txt",
+  "document_id": "doc_7b1956597c3f",
+  "source_filename": "fe0a8f690bed__victor_nolan.txt",
+  "multi_patient": {
+    "multi_patient": false,
+    "distinct_dobs": [
+      "09/03/1956"
+    ],
+    "distinct_mrns": [
+      "m-7002"
+    ],
+    "distinct_patient_names": [
+      "victor nolan dob"
+    ],
+    "reasons": [],
+    "note": "Single-member document (no conflicting identity anchors detected)."
+  },
+  "member": {
+    "id": "M-7002",
+    "name": "Victor Nolan",
+    "dob": "1956-09-03",
+    "age": 70,
+    "sex": "M"
+  },
+  "assigned_measures": [
+    "CBP"
+  ],
+  "measure_state": {
+    "CBP": {
+      "admin_status": "gap",
+      "admin_exclusions_applied": [],
+      "last_dos": null
+    }
+  }
+}

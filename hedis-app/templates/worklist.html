@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Prioritized worklist · HEDIS{% endblock %}
+{% block body %}
+<div class="page-head">
+  <div>
+    <h1>Prioritized worklist</h1>
+    <p class="muted small">Open care gaps ranked for review triage by measure weight × evidence yield × deadline
+      urgency. Star-informed weights (plan-overridable) from <code>priority-config {{ config.config_version }}</code>.
+      Ranking is work management — never a compliance rate.</p>
+  </div>
+</div>
+
+{% if not result['items'] %}
+<div class="empty"><p>No open gaps to prioritize. Gap-closed/excluded measures are excluded.</p></div>
+{% else %}
+<table class="grid" id="worklist">
+  <thead>
+    <tr><th>#</th><th>Score</th><th>Member</th><th>Measure</th><th>Weight</th><th>Yield</th>
+        <th>Urgency</th><th>State</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for it in result['items'] %}
+    <tr>
+      <td class="rank">{{ it.rank }}</td>
+      <td><span class="score-pill">{{ it.priority_score }}</span></td>
+      <td><div class="member-name">{{ it.member_name or it.member_id }}</div>
+        <div class="muted small">{{ it.member_id }}</div></td>
+      <td><b>{{ it.measure_id }}</b> <span class="muted small">{{ it.measure_name }}</span>
+        <div><span class="chip status-{{ it.admin_status or 'open' }}">{{ it.admin_status or 'open' }}</span></div></td>
+      <td><span class="wchip">×{{ it.factors.measure_weight }}</span>
+        <div class="muted xsmall">{{ (it.factors.measure_domain or '').replace('_',' ') }}</div></td>
+      <td>
+        <span class="closability c-{{ it.factors.closability }}">{{ it.factors.closability }}</span>
+        <div class="muted xsmall">{{ '%+.2f'|format(it.factors.yield_bonus) }}</div>
+      </td>
+      <td>{% if it.factors.urgency %}<span class="wchip urgent">+{{ it.factors.urgency }}</span>
+        {% else %}<span class="muted xsmall">—</span>{% endif %}
+        {% if it.days_to_deadline is not none %}<div class="muted xsmall">{{ it.days_to_deadline }}d left</div>{% endif %}</td>
+      <td class="small">{{ it.review_state }}{% if it.signoff and it.signoff != 'pending' %} · {{ it.signoff }}{% endif %}</td>
+      <td>
+        {% if it.analyzed %}<a class="btn small" href="{{ url_for('review', case_id=it.case_id, measure_id=it.measure_id) }}">Review →</a>
+        {% else %}<form method="post" action="{{ url_for('case_analyze', case_id=it.case_id) }}">
+          <input type="hidden" name="measure" value="{{ it.measure_id }}"><button class="btn small">Analyze →</button></form>{% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p class="muted xsmall" style="margin-top:12px">{{ result.disclaimer }}</p>
+{% endif %}
+{% endblock %}

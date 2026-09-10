@@ -1,0 +1,447 @@
+{
+  "workflow": "chase",
+  "mode": "targeted",
+  "measure_id": "CBP",
+  "measure_name": "Controlling High Blood Pressure",
+  "measurement_year": "MY2027",
+  "rules_version": {
+    "measurement_year": "MY2027",
+    "schema_version": "1.1",
+    "extracted_at": "2026-09-08",
+    "document_title": "HEDIS MY2027 Volume 2: Technical Specifications for Health Plans",
+    "document_url": "https://store.ncqa.org/hedis-my2027-volume-2.html"
+  },
+  "provider": "anthropic",
+  "case_context": {
+    "member_id": "M-7004",
+    "member_age": 67,
+    "admin_status": "gap",
+    "admin_exclusions_applied": [],
+    "last_dos": null,
+    "chased": true
+  },
+  "validation": null,
+  "elements": [
+    {
+      "element_key": "bp_date",
+      "element_label": "BP reading date",
+      "element_type": "date",
+      "required": true,
+      "unit": null,
+      "options": null,
+      "timing": "Most recent reading in the measurement year",
+      "compliance_hint": "Use the most recent reading on or before Dec 31",
+      "evidence_role": null,
+      "ai_value": "2025-05-16",
+      "ai_confidence": 0.98,
+      "evidence_text": "Blood pressure (BP) 130/80 mmHg recorded 05/16/2025, outpatient office reading.",
+      "evidence_anchored": true,
+      "status": "proposed",
+      "in_window": false,
+      "compliance": {
+        "checkable": false,
+        "meets": null,
+        "hint": "Use the most recent reading on or before Dec 31",
+        "basis": null
+      },
+      "needs_review": false,
+      "document_id": "doc_341c1e14319a",
+      "page_number": 1,
+      "char_start": 178,
+      "char_end": 257
+    },
+    {
+      "element_key": "systolic",
+      "element_label": "Systolic",
+      "element_type": "numeric",
+      "required": true,
+      "unit": "mmHg",
+      "options": null,
+      "timing": "Most recent reading in the measurement year",
+      "compliance_hint": "Meets threshold when < 140",
+      "evidence_role": null,
+      "ai_value": "130",
+      "ai_confidence": 0.98,
+      "evidence_text": "Blood pressure (BP) 130/80 mmHg recorded 05/16/2025, outpatient office reading.",
+      "evidence_anchored": true,
+      "status": "proposed",
+      "in_window": false,
+      "compliance": {
+        "checkable": true,
+        "meets": true,
+        "hint": "Meets threshold when < 140",
+        "basis": "130 < 140"
+      },
+      "needs_review": false,
+      "document_id": "doc_341c1e14319a",
+      "page_number": 1,
+      "char_start": 178,
+      "char_end": 257
+    },
+    {
+      "element_key": "diastolic",
+      "element_label": "Diastolic",
+      "element_type": "numeric",
+      "required": true,
+      "unit": "mmHg",
+      "options": null,
+      "timing": "Most recent reading in the measurement year",
+      "compliance_hint": "Meets threshold when < 90",
+      "evidence_role": null,
+      "ai_value": "80",
+      "ai_confidence": 0.98,
+      "evidence_text": "Blood pressure (BP) 130/80 mmHg recorded 05/16/2025, outpatient office reading.",
+      "evidence_anchored": true,
+      "status": "proposed",
+      "in_window": false,
+      "compliance": {
+        "checkable": true,
+        "meets": true,
+        "hint": "Meets threshold when < 90",
+        "basis": "80 < 90"
+      },
+      "needs_review": false,
+      "document_id": "doc_341c1e14319a",
+      "page_number": 1,
+      "char_start": 178,
+      "char_end": 257
+    },
+    {
+      "element_key": "bp_setting",
+      "element_label": "Setting",
+      "element_type": "text",
+      "required": false,
+      "unit": null,
+      "options": [
+        "Outpatient",
+        "Remote monitoring",
+        "Member-reported device"
+      ],
+      "timing": null,
+      "compliance_hint": "Outpatient, remote monitor, or member-reported device",
+      "evidence_role": null,
+      "ai_value": "Outpatient",
+      "ai_confidence": 0.95,
+      "evidence_text": "Blood pressure (BP) 130/80 mmHg recorded 05/16/2025, outpatient office reading.",
+      "evidence_anchored": true,
+      "status": "proposed",
+      "in_window": null,
+      "compliance": {
+        "checkable": false,
+        "meets": null,
+        "hint": "Outpatient, remote monitor, or member-reported device",
+        "basis": null
+      },
+      "needs_review": false,
+      "document_id": "doc_341c1e14319a",
+      "page_number": 1,
+      "char_start": 178,
+      "char_end": 257
+    },
+    {
+      "element_key": "provider_credential",
+      "element_label": "Performing provider credential",
+      "element_type": "text",
+      "required": false,
+      "unit": null,
+      "options": null,
+      "timing": null,
+      "compliance_hint": "Capture the performing provider's signature/credential where the measure requires it",
+      "evidence_role": "provider_credential",
+      "ai_value": "NP",
+      "ai_confidence": 0.9,
+      "evidence_text": "Essential hypertension. Follow-up. No hospice. Signed by M. Lee, NP.",
+      "evidence_anchored": true,
+      "status": "proposed",
+      "in_window": null,
+      "compliance": {
+        "checkable": false,
+        "meets": null,
+        "hint": "Capture the performing provider's signature/credential where the measure requires it",
+        "basis": null
+      },
+      "needs_review": false,
+      "document_id": "doc_341c1e14319a",
+      "page_number": 1,
+      "char_start": 270,
+      "char_end": 338
+    }
+  ],
+  "exclusions": [],
+  "gap_outcome": null,
+  "substantiation": {
+    "valid_data_present": null,
+    "substantiating_elements": [
+      "bp_date",
+      "systolic",
+      "diastolic"
+    ],
+    "missing_elements": [],
+    "next_step": "review_required",
+    "note": "Proposed substantiation and next step for reviewer confirmation; not a compliance determination. QMRM entry (X-5) and provider contact (X-8) are out of scope."
+  },
+  "measure_result": {
+    "proposed_status": "numerator_evidence_found",
+    "proposed_basis": "All required data elements are documented with anchored evidence. Timing check: bp_date, systolic, diastolic dated outside the measurement window \u2014 reviewer confirms the date counts.",
+    "reviewer_decision": "accepted",
+    "final_status": "gap_closed",
+    "decided_by": "Morgan Lee (Administrator)",
+    "decided_at": "2026-09-10T22:48:58+00:00",
+    "note": null
+  },
+  "audit_log": [
+    {
+      "seq": 1,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "system",
+      "action": "analysis_run",
+      "target": "CBP",
+      "detail": "targeted analysis, chase workflow"
+    },
+    {
+      "seq": 2,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "ai",
+      "action": "element_proposed",
+      "target": "bp_date",
+      "detail": "value=2025-05-16 confidence=0.98 anchored=True",
+      "ai_value": "2025-05-16"
+    },
+    {
+      "seq": 3,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "ai",
+      "action": "element_proposed",
+      "target": "systolic",
+      "detail": "value=130 confidence=0.98 anchored=True",
+      "ai_value": "130"
+    },
+    {
+      "seq": 4,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "ai",
+      "action": "element_proposed",
+      "target": "diastolic",
+      "detail": "value=80 confidence=0.98 anchored=True",
+      "ai_value": "80"
+    },
+    {
+      "seq": 5,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "ai",
+      "action": "element_proposed",
+      "target": "bp_setting",
+      "detail": "value=Outpatient confidence=0.95 anchored=True",
+      "ai_value": "Outpatient"
+    },
+    {
+      "seq": 6,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "ai",
+      "action": "element_proposed",
+      "target": "provider_credential",
+      "detail": "value=NP confidence=0.9 anchored=True",
+      "ai_value": "NP"
+    },
+    {
+      "seq": 7,
+      "ts": "2026-09-10T22:44:25+00:00",
+      "actor": "ai",
+      "action": "measure_result_proposed",
+      "target": "CBP",
+      "detail": "numerator_evidence_found"
+    },
+    {
+      "seq": 8,
+      "ts": "2026-09-10T22:44:30+00:00",
+      "actor": "reviewer",
+      "action": "escalated",
+      "target": "CBP",
+      "detail": "BP reading dated 05/2025 \u2014 outside MY2027; confirm timing / request current record",
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      }
+    },
+    {
+      "seq": 9,
+      "ts": "2026-09-10T22:48:36+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "bp_date",
+      "detail": "kept 2025-05-16",
+      "by": {
+        "id": "u_admin",
+        "name": "Morgan Lee",
+        "role": "Administrator"
+      },
+      "ai_value": "2025-05-16"
+    },
+    {
+      "seq": 10,
+      "ts": "2026-09-10T22:48:38+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "systolic",
+      "detail": "kept 130",
+      "by": {
+        "id": "u_admin",
+        "name": "Morgan Lee",
+        "role": "Administrator"
+      },
+      "ai_value": "130"
+    },
+    {
+      "seq": 11,
+      "ts": "2026-09-10T22:48:40+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "diastolic",
+      "detail": "kept 80",
+      "by": {
+        "id": "u_admin",
+        "name": "Morgan Lee",
+        "role": "Administrator"
+      },
+      "ai_value": "80"
+    },
+    {
+      "seq": 12,
+      "ts": "2026-09-10T22:48:42+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "bp_setting",
+      "detail": "kept Outpatient",
+      "by": {
+        "id": "u_admin",
+        "name": "Morgan Lee",
+        "role": "Administrator"
+      },
+      "ai_value": "Outpatient"
+    },
+    {
+      "seq": 13,
+      "ts": "2026-09-10T22:48:44+00:00",
+      "actor": "reviewer",
+      "action": "finding_accepted",
+      "target": "provider_credential",
+      "detail": "kept NP",
+      "by": {
+        "id": "u_admin",
+        "name": "Morgan Lee",
+        "role": "Administrator"
+      },
+      "ai_value": "NP"
+    },
+    {
+      "seq": 14,
+      "ts": "2026-09-10T22:48:58+00:00",
+      "actor": "reviewer",
+      "action": "measure_result_accepted",
+      "target": "CBP",
+      "detail": "final_status=gap_closed",
+      "by": {
+        "id": "u_admin",
+        "name": "Morgan Lee",
+        "role": "Administrator"
+      }
+    }
+  ],
+  "summary": {
+    "elements_total": 5,
+    "elements_found": 5,
+    "required_missing": 0,
+    "required_missing_keys": [],
+    "exclusions_proposed": 0,
+    "exclusions_already_applied": 0,
+    "mean_confidence": 0.958,
+    "anchored_evidence": 5,
+    "needs_review": 0,
+    "out_of_window_required": 3
+  },
+  "disclaimer": "AI proposals only. Measure compliance, numerator status, and final exclusion application are determined by the reviewer, not by this analysis.",
+  "case_id": "062f364b7319",
+  "analyzed_at": "2026-09-10T22:44:30+00:00",
+  "decisions": {
+    "el:bp_date": {
+      "action": "confirm",
+      "final_value": "2025-05-16",
+      "note": null,
+      "by": {
+        "id": "u_admin",
+        "name": "Morgan Lee",
+        "role": "Administrator"
+      },
+      "at": "2026-09-10T22:48:36+00:00"
+    },
+    "el:systolic": {
+      "action": "confirm",
+      "final_value": "130",
+      "note": null,
+      "by": {
+        "id": "u_admin",
+        "name": "Morgan Lee",
+        "role": "Administrator"
+      },
+      "at": "2026-09-10T22:48:38+00:00"
+    },
+    "el:diastolic": {
+      "action": "confirm",
+      "final_value": "80",
+      "note": null,
+      "by": {
+        "id": "u_admin",
+        "name": "Morgan Lee",
+        "role": "Administrator"
+      },
+      "at": "2026-09-10T22:48:40+00:00"
+    },
+    "el:bp_setting": {
+      "action": "confirm",
+      "final_value": "Outpatient",
+      "note": null,
+      "by": {
+        "id": "u_admin",
+        "name": "Morgan Lee",
+        "role": "Administrator"
+      },
+      "at": "2026-09-10T22:48:42+00:00"
+    },
+    "el:provider_credential": {
+      "action": "confirm",
+      "final_value": "NP",
+      "note": null,
+      "by": {
+        "id": "u_admin",
+        "name": "Morgan Lee",
+        "role": "Administrator"
+      },
+      "at": "2026-09-10T22:48:44+00:00"
+    }
+  },
+  "vsd_version": {
+    "measurement_year": "MY2027",
+    "effective": {
+      "start": "2027-01-01",
+      "end": "2027-12-31"
+    },
+    "loaded_at": "2026-09-10"
+  },
+  "document_id": "doc_341c1e14319a",
+  "source_document": {
+    "document_id": "doc_341c1e14319a",
+    "filename": "derek_cole.txt"
+  },
+  "escalations": [
+    {
+      "by": {
+        "id": "u_reviewer",
+        "name": "Dana Cole",
+        "role": "Reviewer"
+      },
+      "reason": "BP reading dated 05/2025 \u2014 outside MY2027; confirm timing / request current record",
+      "at": "2026-09-10T22:44:30+00:00"
+    }
+  ]
+}

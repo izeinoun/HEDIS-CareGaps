@@ -1,0 +1,41 @@
+{
+  "id": "062f364b7319",
+  "created_at": "2026-09-10T22:44:25+00:00",
+  "workflow": "chase",
+  "measurement_year": "MY2027",
+  "pack_year": "MY2027",
+  "chart_filename": "derek_cole.txt",
+  "document_id": "doc_341c1e14319a",
+  "source_filename": "062f364b7319__derek_cole.txt",
+  "multi_patient": {
+    "multi_patient": false,
+    "distinct_dobs": [
+      "11/01/1959"
+    ],
+    "distinct_mrns": [
+      "m-7004"
+    ],
+    "distinct_patient_names": [
+      "derek cole dob"
+    ],
+    "reasons": [],
+    "note": "Single-member document (no conflicting identity anchors detected)."
+  },
+  "member": {
+    "id": "M-7004",
+    "name": "Derek Cole",
+    "dob": "1959-11-01",
+    "age": 67,
+    "sex": "M"
+  },
+  "assigned_measures": [
+    "CBP"
+  ],
+  "measure_state": {
+    "CBP": {
+      "admin_status": "gap",
+      "admin_exclusions_applied": [],
+      "last_dos": null
+    }
+  }
+}
